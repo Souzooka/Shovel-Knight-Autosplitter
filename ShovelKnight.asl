@@ -4,8 +4,13 @@ state("ShovelKnight", "Version 2.4A")
 	uint PlayerGold : 0x4CEB14; // S
 	float HPPlayer : 0x4CC0EC, 0x94, 0x420 /*blazeit*/, 0x18, 0x2C; // Display for player life at top of screen
 
+	// Misc Stats
+	uint Kills : 0x4CF818;
+	uint BossKills : 0x4D0AA8; // not sure if this is boss kills, per se -- gets set to 1 after color screen effect at end of stage, reset to 0 on map.
+	uint StageID : 0x4CF994;
+
 	// Boss HPs
-	float HPBossDisplay : 0x4CC0EC, 0x94, 0x424, /*notsoblazeit*/ 0x18, 0x2C; // Display for boss life at top of screen
+	float HPBossDisplay : 0x4CC0EC, 0x94, 0x424, /*notsoblazeit*/ 0x18, 0x2C; // Display for boss life at top of screen -- if this is anything but 0 or null we're in a boss fight.
 	float HPBlackKnight : 0x4CC0EC, 0x20, 0x38, 0x198, 0x20;
 }
 
