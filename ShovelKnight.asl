@@ -4,7 +4,7 @@ state("ShovelKnight", "Version 2.4A")
 	byte CharacterSelected : 0x4CEB04; // 0 for Shovel Knight, 1 for Plague Knight
 	uint PlayerGold : 0x4CEB14; // S
 	bool PlayerIsAlive : 0x4CC09E;
-	float HPPlayer : 0x4CC0EC, 0x94, 0x420 /*blazeit*/, 0x18, 0x2C; // Display for player life at top of screen
+	float HPPlayerDisplay : 0x4CC0EC, 0x94, 0x420 /*blazeit*/, 0x18, 0x2C; // Display for player life at top of screen
 
 	// Misc Stats
 	uint Kills : 0x4CF818;
@@ -63,7 +63,7 @@ init
 update
 {
 	// going back to title screen may break this logic -- also may need to check old.HPPlayer for stage transistion?
-	if (current.HPBossDisplay == 0 && old.HPBossDisplay != 0 && current.HPPlayer > 0 && (old.HPPlayer != null && old.HPPlayer != 0)) {
+	if (current.HPBossDisplay == 0 && old.HPBossDisplay != 0 && current.HPPlayerDisplay > 0) {
 		vars.BossRecentlyDefeated = true;
 		vars.BossKillCounter++;
 	}
@@ -78,6 +78,17 @@ split
 {
 	if (vars.BossRecentlyDefeated && current.PlayerGold > old.PlayerGold) {
 		vars.BossRecentlyDefeated = false;
+		vars.BossKillCounter = 0;
+		return true;
+	}
+	else if (vars.BossKillCounter == 9 && vars.StageID == 18) {
+		vars.BossRecentlyDefeated = false;
+		vars.BossKillCounter = 0;
+		return true;
+	}
+	else if (vars.BossKillCounter == 2 && vars.StageID == 14) {
+		vars.BossRecentlyDefeated = false;
+		vars.BossKillCounter = 0;
 		return true;
 	}
 }
