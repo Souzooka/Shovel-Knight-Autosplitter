@@ -68,7 +68,8 @@ update
 		vars.BossKillCounter++;
 	}
 
-	if (!current.PlayerIsAlive) {
+
+	if (!current.PlayerIsAlive || current.HPPlayerDisplay == null) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 	}
@@ -84,7 +85,13 @@ split
 	if (vars.BossRecentlyDefeated && current.PlayerGold > old.PlayerGold) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
-		return true;
+		switch((uint)current.StageID) {
+			case 8:
+			case 9:
+				return true;
+			default:
+				return false;
+		}
 	}
 	else if (vars.BossKillCounter == 9 && vars.StageID == 18) {
 		vars.BossRecentlyDefeated = false;
