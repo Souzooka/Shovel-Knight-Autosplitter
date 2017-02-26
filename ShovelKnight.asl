@@ -88,7 +88,15 @@ split
 		switch((uint)current.StageID) {
 			case 8:
 			case 9:
+			case 11:
+			case 12:
+			case 13:
+			case 15:
+			case 16:
+			case 17:
 				return true;
+			case 38:
+				return current.CharacterSelected == 1;
 			default:
 				return false;
 		}
