@@ -106,7 +106,7 @@ split
 		vars.BossKillCounter = 0;
 		return true;
 	}
-	else if (vars.BossKillCounter == 2 && vars.StageID == 14) {
+	else if (current.StageID == 14 && ((vars.BossKillCounter == 2 && current.CharacterSelected == 0) || (current.CharacterSelected == 1 && vars.BossKillCounter == 3))) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 		return true;
