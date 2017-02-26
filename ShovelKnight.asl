@@ -68,7 +68,7 @@ update
 		vars.BossKillCounter++;
 	}
 
-	if (!PlayerIsAlive) {
+	if (!current.PlayerIsAlive) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 	}
@@ -96,4 +96,6 @@ split
 		vars.BossKillCounter = 0;
 		return true;
 	}
+
+
 }
