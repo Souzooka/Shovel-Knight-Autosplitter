@@ -67,6 +67,11 @@ update
 		vars.BossRecentlyDefeated = true;
 		vars.BossKillCounter++;
 	}
+
+	if (!PlayerIsAlive) {
+		vars.BossRecentlyDefeated = false;
+		vars.BossKillCounter = 0;
+	}
 }
 
 start
