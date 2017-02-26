@@ -19,7 +19,7 @@ state("ShovelKnight", "Version 2.4A")
 	float HPBossDisplay : 0x4CC0EC, 0x94, 0x424, /*notsoblazeit*/ 0x18, 0x2C; // Display for boss life at top of screen -- if this is anything but 0 or null we're in a boss fight.
 
 	// Uncategorized
-	byte StartCheck : 0x4CEDE8; // 9 in title, becomes (saveslot - 1) when "yes" is pressed
+	byte SaveSlot : 0x4CEDE8; // 9 in title, becomes (saveslot - 1) when "yes" is pressed -- this is 0-based
 }
 
 startup
@@ -68,17 +68,21 @@ update
 	}
 
 
-	if (current.HPPlayerDisplay == null || current.StartCheck == 9) {
+	if (current.HPPlayerDisplay == null || current.SaveSlot == 9) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 	}
 
-	print(vars.BossRecentlyDefeated.ToString());
 }
 
 start
 {
-	return current.StartCheck < 9 && old.StartCheck == 9;
+	return current.SaveSlot < 9 && old.SaveSlot == 9;
+}
+
+reset
+{
+	return current.SaveSlot == 9 && old.SaveSlot != 9;
 }
 
 split
