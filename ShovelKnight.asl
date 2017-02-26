@@ -62,17 +62,18 @@ init
 
 update
 {
-	// going back to title screen may break this logic -- also may need to check old.HPPlayer for stage transistion?
 	if (current.HPBossDisplay == 0 && old.HPBossDisplay != 0 && current.HPPlayerDisplay > 0) {
 		vars.BossRecentlyDefeated = true;
 		vars.BossKillCounter++;
 	}
 
 
-	if (!current.PlayerIsAlive || current.HPPlayerDisplay == null) {
+	if (current.HPPlayerDisplay == null || current.StartCheck == 9) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 	}
+
+	print(vars.BossRecentlyDefeated.ToString());
 }
 
 start
