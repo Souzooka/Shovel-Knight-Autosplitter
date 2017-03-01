@@ -3,17 +3,18 @@ state("ShovelKnight", "Version 2.4A")
 	// Player stats
 	byte CharacterSelected : 0x4CEB04; // 0 for Shovel Knight, 1 for Plague Knight
 	uint PlayerGold : 0x4CEB14; // S
-	bool PlayerIsAlive : 0x4CC09E;
 	float HPPlayerDisplay : 0x4CC0EC, 0x94, 0x420 /*blazeit*/, 0x18, 0x2C; // Display for player life at top of screen
 
 	// Misc Stats
-	uint Kills : 0x4CF818;
-	uint BossKills : 0x4D0AA8; // not sure if this is boss kills, per se -- gets set to 1 after color screen effect at end of stage, reset to 0 on map.
+/*	uint Kills : 0x4CF818;
+	uint BossKills : 0x4D0AA8; // not sure if this is boss kills, per se -- gets set to 1 after color screen effect at end of stage, reset to 0 on map.*/
 	uint StageID : 0x4CF994;
 	byte SaveSlot : 0x4CEDE8; // 9 in title, becomes (saveslot - 1) when "yes" is pressed -- this is 0-based
 
 	/* List of stage IDs:
-	8: The Plains
+	8: The Plains (✓)
+	9: Pridemoor Keep (✓)
+	10: The Lich Yard (✓)
 	*/
 
 	// Boss HPs
@@ -63,11 +64,11 @@ init
 
 update
 {
-	// if the boss's HP display is 0, check if it wasn't 0 
+	// this logic looks like it should fire when respawning, but it doesn't
+	// if there's a problem add "&& old.HPBossDisplay != null", but we should be good
 	if (current.HPBossDisplay == 0 && old.HPBossDisplay != 0 && current.HPPlayerDisplay > 0) {
 		vars.BossRecentlyDefeated = true;
 		vars.BossKillCounter++;
-		print("bleh");
 	}
 
 	// if the HP display isn't shown (as result of going to map, dying, or going to title), reset counter vars
@@ -100,6 +101,9 @@ split
 			case 8:
 				// The Plains
 			case 9:
+				// Pridemoor Keep
+			case 10:
+				// The Lich Yard
 			case 11:
 			case 12:
 			case 13:
