@@ -10,6 +10,7 @@ state("ShovelKnight", "Version 2.4A")
 	uint Kills : 0x4CF818;
 	uint BossKills : 0x4D0AA8; // not sure if this is boss kills, per se -- gets set to 1 after color screen effect at end of stage, reset to 0 on map.
 	uint StageID : 0x4CF994;
+	byte SaveSlot : 0x4CEDE8; // 9 in title, becomes (saveslot - 1) when "yes" is pressed -- this is 0-based
 
 	/* List of stage IDs:
 	8: The Plains
@@ -17,13 +18,12 @@ state("ShovelKnight", "Version 2.4A")
 
 	// Boss HPs
 	float HPBossDisplay : 0x4CC0EC, 0x94, 0x424, /*notsoblazeit*/ 0x18, 0x2C; // Display for boss life at top of screen -- if this is anything but 0 or null we're in a boss fight.
-
-	// Uncategorized
-	byte SaveSlot : 0x4CEDE8; // 9 in title, becomes (saveslot - 1) when "yes" is pressed -- this is 0-based
+	
 }
 
 startup
 {
+	settings.Add("splits", true, "Splits");
 
 	vars.BossRecentlyDefeated = false;
 	vars.BossKillCounter = 0;
@@ -41,11 +41,12 @@ startup
 		"A3 ?? ?? ?? ??",
 		"5F")
 
-	// HPPlayer offsets: 0x94, 0x420, 0x18, 0x2C
+	// Note: Rescan pointers when stage ID changes
+
+	// HPPlayerDisplay offsets: 0x94, 0x420, 0x18, 0x2C
 	// HPBossDisplay offsets: 0x94, 0x424, 0x18, 0x2C
-	// HPBlackKnight offsets: 0x20, 0x38, 0x198, 0x20
-	// HPBlackKnight base address scan (if game updates):
-	/*	vars.HPBlackKnightTarget = new SigScanTarget(1,
+	// HPPlayerDisplay base address scan (if game updates):
+	/*	vars.HPPlayerDisplay = new SigScanTarget(1,
 		"A1 ?? ?? ??",
 		"80 78 24 00",
 		"?? ?? ?? ?? ?? ??",
@@ -62,13 +63,15 @@ init
 
 update
 {
+	// if the boss's HP display is 0, check if it wasn't 0 
 	if (current.HPBossDisplay == 0 && old.HPBossDisplay != 0 && current.HPPlayerDisplay > 0) {
 		vars.BossRecentlyDefeated = true;
 		vars.BossKillCounter++;
+		print("bleh");
 	}
 
-
-	if (current.HPPlayerDisplay == null || current.SaveSlot == 9) {
+	// if the HP display isn't shown (as result of going to map, dying, or going to title), reset counter vars
+	if (current.HPPlayerDisplay == null) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 	}
@@ -77,21 +80,25 @@ update
 
 start
 {
+	// Start when a save slot is selected
 	return current.SaveSlot < 9 && old.SaveSlot == 9;
 }
 
 reset
 {
+	// Reset when save slot is deselected (which happens when going to title)
 	return current.SaveSlot == 9 && old.SaveSlot != 9;
 }
 
 split
 {
+	// split on getting gold after every required boss
 	if (vars.BossRecentlyDefeated && current.PlayerGold > old.PlayerGold) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 		switch((uint)current.StageID) {
 			case 8:
+				// The Plains
 			case 9:
 			case 11:
 			case 12:
@@ -106,11 +113,13 @@ split
 				return false;
 		}
 	}
+	// split after boss rush (broken)
 	else if (vars.BossKillCounter == 9 && vars.StageID == 18) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 		return true;
 	}
+	// split after Tinker (broken)
 	else if (current.StageID == 14 && ((vars.BossKillCounter == 2 && current.CharacterSelected == 0) || (current.CharacterSelected == 1 && vars.BossKillCounter == 3))) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
