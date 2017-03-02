@@ -22,7 +22,8 @@ state("ShovelKnight", "Version 2.4A")
 	15: Stranded Ship (Polar Knight) (✓)
 	16: Flying Machine (Propeller Knight) (✓)
 	17: Tower of Fate: Entrance (Black Knight EX) (✓)
-	18: Tower of Fate: Ascent
+	18: Tower of Fate: Ascent (Boss Rush) (✓)
+	19: Tower of Fate: ???????? (Enchantress) (✓)
 	*/
 
 	// Boss HPs
@@ -165,12 +166,7 @@ split
 				return false;
 		}
 	}
-	// split after boss rush (broken)
-	if (vars.BossKillCounter == 9 && current.StageID == 18) {
-		vars.BossRecentlyDefeated = false;
-		vars.BossKillCounter = 0;
-		return true;
-	}
+
 	// split after Tinker
 	// if we're in the Clockwork Tower and we've gone through 2 phases as SK, or 3 as PK
 	if (current.StageID == 14 && current.PlayerGold > old.PlayerGold &&
@@ -181,5 +177,18 @@ split
 		return true;
 	}
 
+	// split after boss rush
+	if (vars.BossKillCounter == 9 && current.StageID == 18) {
+		vars.BossRecentlyDefeated = false;
+		vars.BossKillCounter = 0;
+		return true;
+	}
+
+	// Enchantress Split
+	if (current.StageID == 19 && vars.BossKillCounter == 2) {
+		vars.BossRecentlyDefeated = false;
+		vars.BossKillCounter = 0;
+		return true;
+	}
 
 }
