@@ -17,8 +17,8 @@
 state("ShovelKnight", "Version 2.4A")
 {
 	// Player stats
-	bool CharacterSelected : 0x4CEB04; // false for Shovel Knight, true for Plague Knight
-	uint PlayerGold : 0x4CEB14; // S
+	bool PlagueKnight : 0x4CEB04; // false for Shovel Knight, true for Plague Knight
+/*	uint PlayerGold : 0x4CEB14; // S*/
 /*	float HPPlayerDisplay : 0x4CC0EC, 0x94, 0x420, 0x18, 0x2C; // Display for player life at top of screen*/
 
 	// Misc Stats
@@ -88,7 +88,7 @@ init
 
 	vars.watchers = new MemoryWatcherList();
 
-	vars.CharacterSelected = new MemoryWatcher<bool>(IntPtr.Zero);
+	vars.PlagueKnight = new MemoryWatcher<bool>(IntPtr.Zero);
 	vars.PlayerGold = new MemoryWatcher<uint>(IntPtr.Zero);
 	vars.StageID = new MemoryWatcher<byte>(IntPtr.Zero);
 	vars.SaveSlot = new MemoryWatcher<byte>(IntPtr.Zero);
@@ -97,7 +97,7 @@ init
 
 	vars.HPPlayerDisplayCodeAddr = IntPtr.Zero;
 
-	vars.CharacterSelectedAddr = IntPtr.Zero;
+	vars.PlagueKnightAddr = IntPtr.Zero;
 	vars.PlayerGoldAddr = IntPtr.Zero;
 	vars.StageIDAddr = IntPtr.Zero;
 	vars.SaveSlotAddr = IntPtr.Zero;
@@ -106,6 +106,15 @@ init
 
 	// REMINDER: The base address is always the same in each instance of the same version. You only need to scan for it in init when the game is loaded, and never again!
 	// REMINDER: The only things which may need readjusting are the pointer values.
+
+	// PlagueKnight offsets: Static
+	vars.PlagueKnightTarget = new SigScanTarget(1,
+		"A1 ?? ?? ?? ??",		// Target Address
+		"83 F8 01",
+		"75 13",
+		"83 3D ?? ?? ?? ?? 0B",
+		"74 14",
+		"8B 7D F8");
 
 	// PlayerGold offsets: Static
 	// PlayerGold base address scan (if game updates):
@@ -140,9 +149,14 @@ init
 		vars.PlayerGoldAddr = memory.ReadValue<int>((IntPtr)vars.PlayerGoldCodeAddr);
 		vars.PlayerGold = new MemoryWatcher<uint>((IntPtr)vars.PlayerGoldAddr);
 
+		vars.PlagueKnightCodeAddr = scanner.Scan(vars.PlagueKnightTarget);
+		vars.PlagueKnightAddr = memory.ReadValue<int>((IntPtr)vars.PlagueKnightCodeAddr);
+		vars.PlagueKnight = new MemoryWatcher<bool>((IntPtr)vars.PlagueKnightAddr);
+
 		vars.watchers.AddRange(new MemoryWatcher[]
 		{
-			vars.PlayerGold
+			vars.PlayerGold,
+			vars.PlagueKnight
 		});
 
 	};
@@ -278,7 +292,7 @@ split
 				return settings["ToFEntranceGold"];
 			case 38:
 				// Black Knight 2
-				return settings["BlackKnight2Gold"] && current.CharacterSelected;
+				return settings["BlackKnight2Gold"] && vars.PlagueKnight.Current;
 			default:
 				return false;
 		}
@@ -287,8 +301,8 @@ split
 	// split after Tinker
 	// if we're in the Clockwork Tower and we've gone through 2 phases as SK, or 3 as PK
 	if (current.StageID == 14 && current.PlayerGold > old.PlayerGold &&
-	((vars.BossKillCounter == 2 && !current.CharacterSelected) || 
-	(vars.BossKillCounter == 3 && current.CharacterSelected))) {
+	((vars.BossKillCounter == 2 && !vars.PlagueKnight.Current) || 
+	(vars.BossKillCounter == 3 && vars.PlagueKnight.Current))) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 		return settings["ClockTowerGold"];
