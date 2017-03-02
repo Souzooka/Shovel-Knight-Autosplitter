@@ -19,15 +19,15 @@ state("ShovelKnight", "Version 2.4A")
 	// Player stats
 	bool CharacterSelected : 0x4CEB04; // false for Shovel Knight, true for Plague Knight
 	uint PlayerGold : 0x4CEB14; // S
-	float HPPlayerDisplay : 0x4CC0EC, 0x94, 0x420 /*blazeit*/, 0x18, 0x2C; // Display for player life at top of screen
+/*	float HPPlayerDisplay : 0x4CC0EC, 0x94, 0x420, 0x18, 0x2C; // Display for player life at top of screen*/
 
 	// Misc Stats
 	byte StageID : 0x4CF994;
 	byte SaveSlot : 0x4CEDE8; // 9 in title, becomes (saveslot - 1) when "yes" is pressed -- this is 0-based
 
-	// Boss HPs
-	float HPBossDisplay : 0x4CC0EC, 0x94, 0x424, /*notsoblazeit*/ 0x18, 0x2C; // Display for boss life at top of screen -- if this is anything but 0 or null we're in a boss fight.
-	
+/*	// Boss HPs
+	float HPBossDisplay : 0x4CC0EC, 0x94, 0x424, 0x18, 0x2C; // Display for boss life at top of screen -- if this is anything but 0 or null we're in a boss fight.
+	*/
 }
 
 startup
@@ -97,9 +97,6 @@ init
 
 	vars.HPPlayerDisplayCodeAddr = IntPtr.Zero;
 
-	vars.HPPlayerDisplayPointerLevel3 = (IntPtr)0x2C;
-	vars.HPBossDisplayPointerLevel3 = (IntPtr)0x2C;
-
 	vars.CharacterSelectedAddr = IntPtr.Zero;
 	vars.PlayerGoldAddr = IntPtr.Zero;
 	vars.StageIDAddr = IntPtr.Zero;
@@ -112,7 +109,7 @@ init
 
 	// PlayerGold offsets: Static
 	// PlayerGold base address scan (if game updates):
-	vars.PlayerGoldTarget = new SigScanTarget(26,
+	vars.PlayerGoldTarget = new SigScanTarget(23,
 		"C6 83 ?? ?? ?? ?? 01",
 		"83 BB ?? ?? ?? ?? 00",
 		"75 0B",
@@ -138,6 +135,15 @@ init
 
 	// SCANNING ACTIONS START 
 	Action<string> RescanStatic = (text) => {
+
+		vars.PlayerGoldCodeAddr = scanner.Scan(vars.PlayerGoldTarget);
+		vars.PlayerGoldAddr = memory.ReadValue<int>((IntPtr)vars.PlayerGoldCodeAddr);
+		vars.PlayerGold = new MemoryWatcher<uint>((IntPtr)vars.PlayerGoldAddr);
+
+		vars.watchers.AddRange(new MemoryWatcher[]
+		{
+			vars.PlayerGold
+		});
 
 	};
 
@@ -170,8 +176,6 @@ init
 			vars.HPPlayerDisplay = new MemoryWatcher<float>((IntPtr)vars.HPPlayerDisplayAddr);
 			vars.HPBossDisplay = new MemoryWatcher<float>((IntPtr)vars.HPBossDisplayAddr);
 
-			print(vars.HPPlayerDisplayAddr.ToString("X8"));
-
 			vars.watchers.AddRange(new MemoryWatcher[]
 			{
 				vars.HPPlayerDisplay,
@@ -190,7 +194,7 @@ update
 {
 	// Note: "ShovelKnight.exe"+0x0 isn't a null area of memory 
 	// Rescan Static logic start (This shouldn't have to be used more than once!)
-	if (!vars.RescanStaticStopwatch.IsRunning) {
+	if ((IntPtr)vars.PlayerGoldAddr == IntPtr.Zero && !vars.RescanStaticStopwatch.IsRunning) {
 	    vars.RescanStaticStopwatch.Start();
 	}
 
@@ -218,9 +222,8 @@ update
 		vars.BossKillCounter++;
 	}
 
-	// if the HP display isn't shown (as result of going to map or going to title), reset counter vars
-	// NOTE: MemoryWatcher doesn't have a null value!
-	if (vars.HPPlayerDisplay.Current == 0) {
+	// if we're dead, or the pointer isn't being used (last offset is 0x2C, so it'll point to 0x0000002C in memory) (in map, title, etc.), reset these variables
+	if (vars.HPPlayerDisplay.Current == 0 || (IntPtr)vars.HPPlayerDisplayAddr == (IntPtr)0x2C) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 	}
@@ -244,57 +247,37 @@ split
 {
 	// split on getting gold after every required boss
 	// we do not want vars.BossRecentlyDefeated and vars.BossKillCounter to get reset in undefined stages
-	if (vars.BossRecentlyDefeated && current.PlayerGold > old.PlayerGold) {
+	if (vars.BossRecentlyDefeated && vars.PlayerGold.Current > vars.PlayerGold.Old) {
 		switch((uint)current.StageID) {
 			case 8:
 				// The Plains
-				vars.BossRecentlyDefeated = false;
-				vars.BossKillCounter = 0;
 				return settings["PlainsGold"];
 			case 9:
 				// Pridemoor Keep
-				vars.BossRecentlyDefeated = false;
-				vars.BossKillCounter = 0;
 				return settings["PridemoorKeepGold"];
 			case 10:
 				// The Lich Yard
-				vars.BossRecentlyDefeated = false;
-				vars.BossKillCounter = 0;
 				return settings["LichYardGold"];
 			case 11:
 				// The Explodatorium
-				vars.BossRecentlyDefeated = false;
-				vars.BossKillCounter = 0;
 				return settings["ExplodatoriumGold"];
 			case 12:
 				// Iron Whale
-				vars.BossRecentlyDefeated = false;
-				vars.BossKillCounter = 0;
 				return settings["IronWhaleGold"];
 			case 13:
 				// Lost City
-				vars.BossRecentlyDefeated = false;
-				vars.BossKillCounter = 0;
 				return settings["LostCityGold"];
 			case 15:
 				// Stranded Ship
-				vars.BossRecentlyDefeated = false;
-				vars.BossKillCounter = 0;
 				return settings["StrandedShipGold"];
 			case 16:
 				// Flying Machine
-				vars.BossRecentlyDefeated = false;
-				vars.BossKillCounter = 0;
 				return settings["FlyingMachineGold"];
 			case 17:
 				// Tower of Fate: Entrance
-				vars.BossRecentlyDefeated = false;
-				vars.BossKillCounter = 0;
 				return settings["ToFEntranceGold"];
 			case 38:
 				// Black Knight 2
-				vars.BossRecentlyDefeated = false;
-				vars.BossKillCounter = 0;
 				return settings["BlackKnight2Gold"] && current.CharacterSelected;
 			default:
 				return false;
