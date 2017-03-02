@@ -190,7 +190,7 @@ split
 			case 38:
 				vars.BossRecentlyDefeated = false;
 				vars.BossKillCounter = 0;
-				return settings["BlackKnight2Gold"] && current.CharacterSelected == 1;
+				return settings["BlackKnight2Gold"] && current.CharacterSelected;
 			default:
 				return false;
 		}
