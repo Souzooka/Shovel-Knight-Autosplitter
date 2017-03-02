@@ -23,7 +23,7 @@ state("ShovelKnight", "Version 2.4A")
 
 	// Misc Stats
 /*	byte StageID : 0x4CF994;*/
-	byte SaveSlot : 0x4CEDE8; // 9 in title, becomes (saveslot - 1) when "yes" is pressed -- this is 0-based
+/*	byte SaveSlot : 0x4CEDE8; // 9 in title, becomes (saveslot - 1) when "yes" is pressed -- this is 0-based*/
 
 /*	// Boss HPs
 	float HPBossDisplay : 0x4CC0EC, 0x94, 0x424, 0x18, 0x2C; // Display for boss life at top of screen -- if this is anything but 0 or null we're in a boss fight.
@@ -333,15 +333,11 @@ split
 	if (vars.StageID.Current == 14 && current.PlayerGold > old.PlayerGold &&
 	((vars.BossKillCounter == 2 && !vars.PlagueKnight.Current) || 
 	(vars.BossKillCounter == 3 && vars.PlagueKnight.Current))) {
-		vars.BossRecentlyDefeated = false;
-		vars.BossKillCounter = 0;
 		return settings["ClockTowerGold"];
 	}
 
 	// split after boss rush
 	if (vars.StageID.Current == 18 && vars.BossKillCounter == 9) {
-		vars.BossRecentlyDefeated = false;
-		vars.BossKillCounter = 0;
 		return settings["ToFBossRush"];
 	}
 
@@ -353,8 +349,6 @@ split
 
 	// Enchantress Split Phase 2
 	if (vars.StageID.Current == 19 && vars.BossKillCounter == 2) {
-		vars.BossRecentlyDefeated = false;
-		vars.BossKillCounter = 0;
 		return settings["ToFEnchantress2"];
 	}
 
