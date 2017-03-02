@@ -17,12 +17,12 @@
 state("ShovelKnight", "Version 2.4A")
 {
 	// Player stats
-	bool PlagueKnight : 0x4CEB04; // false for Shovel Knight, true for Plague Knight
+/*	bool PlagueKnight : 0x4CEB04; // false for Shovel Knight, true for Plague Knight*/
 /*	uint PlayerGold : 0x4CEB14; // S*/
 /*	float HPPlayerDisplay : 0x4CC0EC, 0x94, 0x420, 0x18, 0x2C; // Display for player life at top of screen*/
 
 	// Misc Stats
-	byte StageID : 0x4CF994;
+/*	byte StageID : 0x4CF994;*/
 	byte SaveSlot : 0x4CEDE8; // 9 in title, becomes (saveslot - 1) when "yes" is pressed -- this is 0-based
 
 /*	// Boss HPs
@@ -126,6 +126,26 @@ init
 		"A3 ?? ?? ?? ??", 		// Target Address
 		"5F");
 
+	// StageID offsets: Static
+	vars.StageIDTarget = new SigScanTarget(2,
+		"89 1D ?? ?? ?? ??",
+		"89 1D ?? ?? ?? ??",
+		"89 1D ?? ?? ?? ??",
+		"3B C3",
+		"74 0C",
+		"50",
+		"FF D6",
+		"83 C4 04");
+
+	// SaveSlot offsets: Static
+	vars.SaveSlotTarget = new SigScanTarget(2,
+		"C6 05 ?? ?? ?? ?? 09",	// Target Address
+		"E8 ?? ?? ?? ??",
+		"68 ?? ?? ?? ??",
+		"E8 ?? ?? ?? ??",
+		"E8 ?? ?? ?? ??",
+		"88 1D ?? ?? ?? ??");
+
 	// Note: Rescan pointers when stage ID changes
 
 	// HPPlayerDisplay offsets: 0x94, 0x420, 0x18, 0x2C
@@ -153,10 +173,20 @@ init
 		vars.PlagueKnightAddr = memory.ReadValue<int>((IntPtr)vars.PlagueKnightCodeAddr);
 		vars.PlagueKnight = new MemoryWatcher<bool>((IntPtr)vars.PlagueKnightAddr);
 
+		vars.StageIDCodeAddr = scanner.Scan(vars.StageIDTarget);
+		vars.StageIDAddr = memory.ReadValue<int>((IntPtr)vars.StageIDCodeAddr);
+		vars.StageID = new MemoryWatcher<byte>((IntPtr)vars.StageIDAddr);
+
+		vars.SaveSlotCodeAddr = scanner.Scan(vars.SaveSlotTarget);
+		vars.SaveSlotAddr = memory.ReadValue<int>((IntPtr)vars.SaveSlotCodeAddr);
+		vars.SaveSlot = new MemoryWatcher<byte>((IntPtr)vars.SaveSlotAddr);
+
 		vars.watchers.AddRange(new MemoryWatcher[]
 		{
 			vars.PlayerGold,
-			vars.PlagueKnight
+			vars.PlagueKnight,
+			vars.StageID,
+			vars.SaveSlot
 		});
 
 	};
@@ -248,13 +278,13 @@ update
 start
 {
 	// Start when a save slot is selected
-	return current.SaveSlot < 9 && old.SaveSlot == 9;
+	return vars.SaveSlot.Current < 9 && vars.SaveSlot.Old == 9;
 }
 
 reset
 {
 	// Reset when save slot is deselected (which happens when going to title)
-	return current.SaveSlot == 9 && old.SaveSlot != 9;
+	return vars.SaveSlot.Current == 9 && vars.SaveSlot.Old != 9;
 }
 
 split
@@ -262,7 +292,7 @@ split
 	// split on getting gold after every required boss
 	// we do not want vars.BossRecentlyDefeated and vars.BossKillCounter to get reset in undefined stages
 	if (vars.BossRecentlyDefeated && vars.PlayerGold.Current > vars.PlayerGold.Old) {
-		switch((uint)current.StageID) {
+		switch((uint)vars.StageID.Current) {
 			case 8:
 				// The Plains
 				return settings["PlainsGold"];
@@ -300,7 +330,7 @@ split
 
 	// split after Tinker
 	// if we're in the Clockwork Tower and we've gone through 2 phases as SK, or 3 as PK
-	if (current.StageID == 14 && current.PlayerGold > old.PlayerGold &&
+	if (vars.StageID.Current == 14 && current.PlayerGold > old.PlayerGold &&
 	((vars.BossKillCounter == 2 && !vars.PlagueKnight.Current) || 
 	(vars.BossKillCounter == 3 && vars.PlagueKnight.Current))) {
 		vars.BossRecentlyDefeated = false;
@@ -309,20 +339,20 @@ split
 	}
 
 	// split after boss rush
-	if (vars.BossKillCounter == 9 && current.StageID == 18) {
+	if (vars.StageID.Current == 18 && vars.BossKillCounter == 9) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 		return settings["ToFBossRush"];
 	}
 
 	// Enchantress Split Phase 1
-	if (current.StageID == 19 && vars.BossKillCounter == 1 && vars.BossRecentlyDefeated) {
+	if (vars.StageID.Current == 19 && vars.BossKillCounter == 1 && vars.BossRecentlyDefeated) {
 		vars.BossRecentlyDefeated = false;
 		return settings["ToFEnchantress1"];
 	}
 
 	// Enchantress Split Phase 2
-	if (current.StageID == 19 && vars.BossKillCounter == 2) {
+	if (vars.StageID.Current == 19 && vars.BossKillCounter == 2) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 		return settings["ToFEnchantress2"];
