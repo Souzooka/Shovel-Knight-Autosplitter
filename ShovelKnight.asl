@@ -1,16 +1,3 @@
-state("ShovelKnight", "Version 2.4A")
-{
-	// Player stats
-	bool CharacterSelected : 0x4CEB04; // false for Shovel Knight, true for Plague Knight
-	uint PlayerGold : 0x4CEB14; // S
-	float HPPlayerDisplay : 0x4CC0EC, 0x94, 0x420 /*blazeit*/, 0x18, 0x2C; // Display for player life at top of screen
-
-	// Misc Stats
-/*	uint Kills : 0x4CF818;
-	uint BossKills : 0x4D0AA8; // not sure if this is boss kills, per se -- gets set to 1 after color screen effect at end of stage, reset to 0 on map.*/
-	uint StageID : 0x4CF994;
-	byte SaveSlot : 0x4CEDE8; // 9 in title, becomes (saveslot - 1) when "yes" is pressed -- this is 0-based
-
 	/* List of stage IDs:
 	8: The Plains (Black Knight) (✓)
 	9: Pridemoor Keep (King Knight) (✓)
@@ -24,7 +11,19 @@ state("ShovelKnight", "Version 2.4A")
 	17: Tower of Fate: Entrance (Black Knight EX) (✓)
 	18: Tower of Fate: Ascent (Boss Rush) (✓)
 	19: Tower of Fate: ???????? (Enchantress) (✓)
+	38: Black Knight 2 (✓)
 	*/
+
+state("ShovelKnight", "Version 2.4A")
+{
+	// Player stats
+	bool CharacterSelected : 0x4CEB04; // false for Shovel Knight, true for Plague Knight
+	uint PlayerGold : 0x4CEB14; // S
+	float HPPlayerDisplay : 0x4CC0EC, 0x94, 0x420 /*blazeit*/, 0x18, 0x2C; // Display for player life at top of screen
+
+	// Misc Stats
+	byte StageID : 0x4CF994;
+	byte SaveSlot : 0x4CEDE8; // 9 in title, becomes (saveslot - 1) when "yes" is pressed -- this is 0-based
 
 	// Boss HPs
 	float HPBossDisplay : 0x4CC0EC, 0x94, 0x424, /*notsoblazeit*/ 0x18, 0x2C; // Display for boss life at top of screen -- if this is anything but 0 or null we're in a boss fight.
@@ -39,6 +38,7 @@ startup
 	settings.Add("SplitsGold", true, "Boss Splits (on gold)", "Splits");
 	settings.Add("SplitsFadeOut", false, "Boss Splits (on fadeout) (not implemented)", "Splits");
 
+	// On Gold Boss Splits
 	settings.Add("PlainsGold", true, "The Plains", "SplitsGold");
 	settings.Add("PridemoorKeepGold", true, "PrideMoor Keep", "SplitsGold");
 	settings.Add("LichYardGold", true, "Lich Yard", "SplitsGold");
@@ -51,6 +51,7 @@ startup
 	settings.Add("ToFEntranceGold", true, "Tower of Fate: Entrance", "SplitsGold");
 	settings.Add("BlackKnight2Gold", true, "Black Knight 2 (PK Only)", "SplitsGold");
 
+	// On Fade Out Boss Splits
 	settings.Add("PlainsFadeOut", true, "The Plains", "SplitsFadeOut");
 	settings.Add("PridemoorKeepFadeOut", true, "PrideMoor Keep", "SplitsFadeOut");
 	settings.Add("LichYardFadeOut", true, "Lich Yard", "SplitsFadeOut");
@@ -63,6 +64,7 @@ startup
 	settings.Add("ToFEntranceFadeOut", true, "Tower of Fate: Entrance", "SplitsFadeOut");
 	settings.Add("BlackKnight2FadeOut", true, "Black Knight 2 (PK Only)", "SplitsFadeOut");
 
+	// General Splits
 	settings.Add("ToFBossRush", true, "Boss Rush", "Splits");
 	settings.Add("ToFEnchantress1", false, "Enchantress Phase 1", "Splits");
 	settings.Add("ToFEnchantress2", true, "Enchantress Phase 2", "Splits");
@@ -72,55 +74,158 @@ startup
 
 init 
 {
+
 	// CUSTOM/PLACEHOLDER VARIABLES START
+	// These two variables should be accessible inside the whole init block
+	var module = modules.First();
+	var scanner = new SignatureScanner(game, module.BaseAddress, module.ModuleMemorySize);
+
 	vars.BossRecentlyDefeated = false;
 	vars.BossKillCounter = 0;
+
+	vars.RescanStaticStopwatch = new Stopwatch();
+	vars.RescanHPDisplayStopwatch = new Stopwatch();
+
+	vars.watchers = new MemoryWatcherList();
+
+	vars.CharacterSelected = new MemoryWatcher<bool>(IntPtr.Zero);
+	vars.PlayerGold = new MemoryWatcher<uint>(IntPtr.Zero);
+	vars.StageID = new MemoryWatcher<byte>(IntPtr.Zero);
+	vars.SaveSlot = new MemoryWatcher<byte>(IntPtr.Zero);
+	vars.HPPlayerDisplay = new MemoryWatcher<float>(IntPtr.Zero);
+	vars.HPBossDisplay = new MemoryWatcher<float>(IntPtr.Zero);
+
+	vars.HPPlayerDisplayCodeAddr = IntPtr.Zero;
+
+	vars.HPPlayerDisplayPointerLevel3 = (IntPtr)0x2C;
+	vars.HPBossDisplayPointerLevel3 = (IntPtr)0x2C;
+
+	vars.CharacterSelectedAddr = IntPtr.Zero;
+	vars.PlayerGoldAddr = IntPtr.Zero;
+	vars.StageIDAddr = IntPtr.Zero;
+	vars.SaveSlotAddr = IntPtr.Zero;
+	vars.HPPlayerDisplayAddr = (IntPtr)0x2C;
+	vars.HPBossDisplayAddr = (IntPtr)0x2C;
 
 	// REMINDER: The base address is always the same in each instance of the same version. You only need to scan for it in init when the game is loaded, and never again!
 	// REMINDER: The only things which may need readjusting are the pointer values.
 
 	// PlayerGold offsets: Static
 	// PlayerGold base address scan (if game updates):
-	/* 	vars.PlayerGoldTarget = new SigScanTarget(26,
+	vars.PlayerGoldTarget = new SigScanTarget(26,
 		"C6 83 ?? ?? ?? ?? 01",
 		"83 BB ?? ?? ?? ?? 00",
 		"75 0B",
 		"8B 83 ?? ?? ?? ??",
-		"A3 ?? ?? ?? ??",
-		"5F")
+		"A3 ?? ?? ?? ??", 		// Target Address
+		"5F");
 
 	// Note: Rescan pointers when stage ID changes
 
 	// HPPlayerDisplay offsets: 0x94, 0x420, 0x18, 0x2C
 	// HPBossDisplay offsets: 0x94, 0x424, 0x18, 0x2C
 	// HPPlayerDisplay base address scan (if game updates):
-	/*	vars.HPPlayerDisplay = new SigScanTarget(1,
-		"A1 ?? ?? ??",
+	vars.HPPlayerDisplayTarget = new SigScanTarget(1,
+		"A1 ?? ?? ?? ??", 		// Target Address
 		"80 78 24 00",
 		"?? ?? ?? ?? ?? ??",
 		"56",
 		"57",
 		"8D 71 1D"
-		);	*/
+		);
 
 	// CUSTOM/PLACEHOLDER VARIABLES END
+
+	// SCANNING ACTIONS START 
+	Action<string> RescanStatic = (text) => {
+
+	};
+
+	Action<string> RescanHPDisplay = (text) => {
+
+		// Base address won't change, so check to prevent unnecessary scans
+		if ((IntPtr)vars.HPPlayerDisplayCodeAddr == IntPtr.Zero) {
+			vars.HPPlayerDisplayCodeAddr = scanner.Scan(vars.HPPlayerDisplayTarget);
+		}
+
+		vars.HPPlayerDisplayBaseAddr = memory.ReadValue<int>((IntPtr)vars.HPPlayerDisplayCodeAddr);
+		vars.HPBossDisplayBaseAddr = vars.HPPlayerDisplayBaseAddr;
+
+		vars.HPPlayerDisplayPointerLevel1 = memory.ReadValue<int>((IntPtr)vars.HPPlayerDisplayBaseAddr) + 0x94;
+		vars.HPBossDisplayPointerLevel1 = vars.HPPlayerDisplayPointerLevel1;
+
+		vars.HPPlayerDisplayPointerLevel2 = memory.ReadValue<int>((IntPtr)vars.HPPlayerDisplayPointerLevel1) + 0x420;
+		vars.HPBossDisplayPointerLevel2 = memory.ReadValue<int>((IntPtr)vars.HPBossDisplayPointerLevel1) + 0x424;
+
+		vars.HPPlayerDisplayPointerLevel3 = memory.ReadValue<int>((IntPtr)vars.HPPlayerDisplayPointerLevel2) + 0x18;
+		vars.HPBossDisplayPointerLevel3 = memory.ReadValue<int>((IntPtr)vars.HPBossDisplayPointerLevel2) + 0x18;
+
+		vars.HPPlayerDisplayAddrOld = vars.HPPlayerDisplayAddr;
+
+		vars.HPPlayerDisplayAddr = memory.ReadValue<int>((IntPtr)vars.HPPlayerDisplayPointerLevel3) + 0x2C;
+		vars.HPBossDisplayAddr = memory.ReadValue<int>((IntPtr)vars.HPBossDisplayPointerLevel3) + 0x2C;
+
+		if ((IntPtr)vars.HPPlayerDisplayAddrOld == (IntPtr)0x2C && (IntPtr)vars.HPPlayerDisplayAddr != (IntPtr)0x2C) {
+
+			vars.HPPlayerDisplay = new MemoryWatcher<float>((IntPtr)vars.HPPlayerDisplayAddr);
+			vars.HPBossDisplay = new MemoryWatcher<float>((IntPtr)vars.HPBossDisplayAddr);
+
+			print(vars.HPPlayerDisplayAddr.ToString("X8"));
+
+			vars.watchers.AddRange(new MemoryWatcher[]
+			{
+				vars.HPPlayerDisplay,
+				vars.HPBossDisplay
+			});
+		}
+	};
+
+	vars.RescanStatic = RescanStatic;
+	vars.RescanHPDisplay = RescanHPDisplay;
+
+	// SCANNING ACTIONS END
 }
 
 update
 {
-	// this logic looks like it should fire when respawning, but it doesn't
-	// if there's a problem add "&& old.HPBossDisplay != null", but we should be good
-	if (current.HPBossDisplay == 0 && old.HPBossDisplay != 0 && current.HPPlayerDisplay > 0) {
+	// Note: "ShovelKnight.exe"+0x0 isn't a null area of memory 
+	// Rescan Static logic start (This shouldn't have to be used more than once!)
+	if (!vars.RescanStaticStopwatch.IsRunning) {
+	    vars.RescanStaticStopwatch.Start();
+	}
+
+	if (vars.RescanStaticStopwatch.ElapsedMilliseconds >= 1000) {
+		vars.RescanStaticStopwatch.Reset();
+		vars.RescanStatic("");
+	}
+	// Rescan Static logic end
+
+	// Rescan HP Display logic start
+	if (!vars.RescanHPDisplayStopwatch.IsRunning) {
+		vars.RescanHPDisplayStopwatch.Start();
+	}
+
+	// Rescan Pointer paths every 1 second -- this logic shouldn't cause any problems
+	if (vars.RescanHPDisplayStopwatch.ElapsedMilliseconds >= 1000) {
+		vars.RescanHPDisplayStopwatch.Reset();
+		vars.RescanHPDisplay("");
+	}
+	// Rescan HP Display logic end
+
+	// current.HPPlayerDisplay does not become null when respawning
+	if (vars.HPBossDisplay.Current == 0 && vars.HPBossDisplay.Old != 0 && vars.HPPlayerDisplay.Current > 0) {
 		vars.BossRecentlyDefeated = true;
 		vars.BossKillCounter++;
 	}
 
-	// if the HP display isn't shown (as result of going to map, dying, or going to title), reset counter vars
-	if (current.HPPlayerDisplay == null || current.HPPlayerDisplay == 0) {
+	// if the HP display isn't shown (as result of going to map or going to title), reset counter vars
+	// NOTE: MemoryWatcher doesn't have a null value!
+	if (vars.HPPlayerDisplay.Current == 0) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 	}
 
+	vars.watchers.UpdateAll(game);
 }
 
 start
@@ -138,7 +243,6 @@ reset
 split
 {
 	// split on getting gold after every required boss
-	// returns are placeholders for settings
 	// we do not want vars.BossRecentlyDefeated and vars.BossKillCounter to get reset in undefined stages
 	if (vars.BossRecentlyDefeated && current.PlayerGold > old.PlayerGold) {
 		switch((uint)current.StageID) {
@@ -188,6 +292,7 @@ split
 				vars.BossKillCounter = 0;
 				return settings["ToFEntranceGold"];
 			case 38:
+				// Black Knight 2
 				vars.BossRecentlyDefeated = false;
 				vars.BossKillCounter = 0;
 				return settings["BlackKnight2Gold"] && current.CharacterSelected;
