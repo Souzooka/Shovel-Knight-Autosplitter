@@ -37,7 +37,36 @@ startup
 	// Header settings
 	settings.Add("Splits", true, "Splits");
 	settings.Add("SplitsGold", true, "Boss Splits (on gold)", "Splits");
-	settings.Add("SplitsFadeOut", false, "Boss Splits (on fadeout)", "Splits");
+	settings.Add("SplitsFadeOut", false, "Boss Splits (on fadeout) (not implemented)", "Splits");
+
+	settings.Add("PlainsGold", true, "The Plains", "SplitsGold");
+	settings.Add("PridemoorKeepGold", true, "PrideMoor Keep", "SplitsGold");
+	settings.Add("LichYardGold", true, "Lich Yard", "SplitsGold");
+	settings.Add("ExplodatoriumGold", true, "Explodatorium", "SplitsGold");
+	settings.Add("IronWhaleGold", true, "Iron Whale", "SplitsGold");
+	settings.Add("LostCityGold", true, "Lost City", "SplitsGold");
+	settings.Add("ClockTowerGold", true, "Clock Tower", "SplitsGold");
+	settings.Add("StrandedShipGold", true, "Stranded Ship", "SplitsGold");
+	settings.Add("FlyingMachineGold", true, "Flying Machine", "SplitsGold");
+	settings.Add("ToFEntranceGold", true, "Tower of Fate: Entrance", "SplitsGold");
+	settings.Add("BlackKnight2Gold", true, "Black Knight 2 (PK Only)", "SplitsGold");
+
+	settings.Add("PlainsFadeOut", true, "The Plains", "SplitsFadeOut");
+	settings.Add("PridemoorKeepFadeOut", true, "PrideMoor Keep", "SplitsFadeOut");
+	settings.Add("LichYardFadeOut", true, "Lich Yard", "SplitsFadeOut");
+	settings.Add("ExplodatoriumFadeOut", true, "Explodatorium", "SplitsFadeOut");
+	settings.Add("IronWhaleFadeOut", true, "Iron Whale", "SplitsFadeOut");
+	settings.Add("LostCityFadeOut", true, "Lost City", "SplitsFadeOut");
+	settings.Add("ClockTowerFadeOut", true, "Clock Tower", "SplitsFadeOut");
+	settings.Add("StrandedShipFadeOut", true, "Stranded Ship", "SplitsFadeOut");
+	settings.Add("FlyingMachineFadeOut", true, "Flying Machine", "SplitsFadeOut");
+	settings.Add("ToFEntranceFadeOut", true, "Tower of Fate: Entrance", "SplitsFadeOut");
+	settings.Add("BlackKnight2FadeOut", true, "Black Knight 2 (PK Only)", "SplitsFadeOut");
+
+	settings.Add("ToFBossRush", true, "Boss Rush", "Splits");
+	settings.Add("ToFEnchantress1", false, "Enchantress Phase 1", "Splits");
+	settings.Add("ToFEnchantress2", true, "Enchantress Phase 2", "Splits");
+
 	// SETTINGS END
 }
 
@@ -117,51 +146,51 @@ split
 				// The Plains
 				vars.BossRecentlyDefeated = false;
 				vars.BossKillCounter = 0;
-				return true;
+				return settings["PlainsGold"];
 			case 9:
 				// Pridemoor Keep
 				vars.BossRecentlyDefeated = false;
 				vars.BossKillCounter = 0;
-				return true;
+				return settings["PridemoorKeepGold"];
 			case 10:
 				// The Lich Yard
 				vars.BossRecentlyDefeated = false;
 				vars.BossKillCounter = 0;
-				return true;
+				return settings["LichYardGold"];
 			case 11:
 				// The Explodatorium
 				vars.BossRecentlyDefeated = false;
 				vars.BossKillCounter = 0;
-				return true;
+				return settings["ExplodatoriumGold"];
 			case 12:
 				// Iron Whale
 				vars.BossRecentlyDefeated = false;
 				vars.BossKillCounter = 0;
-				return true;
+				return settings["IronWhaleGold"];
 			case 13:
 				// Lost City
 				vars.BossRecentlyDefeated = false;
 				vars.BossKillCounter = 0;
-				return true;
+				return settings["LostCityGold"];
 			case 15:
 				// Stranded Ship
 				vars.BossRecentlyDefeated = false;
 				vars.BossKillCounter = 0;
-				return true;
+				return settings["StrandedShipGold"];
 			case 16:
 				// Flying Machine
 				vars.BossRecentlyDefeated = false;
 				vars.BossKillCounter = 0;
-				return true;
+				return settings["FlyingMachineGold"];
 			case 17:
 				// Tower of Fate: Entrance
 				vars.BossRecentlyDefeated = false;
 				vars.BossKillCounter = 0;
-				return true;
+				return settings["ToFEntranceGold"];
 			case 38:
 				vars.BossRecentlyDefeated = false;
 				vars.BossKillCounter = 0;
-				return current.CharacterSelected == 1;
+				return settings["BlackKnight2Gold"] && current.CharacterSelected == 1;
 			default:
 				return false;
 		}
@@ -174,21 +203,27 @@ split
 	(vars.BossKillCounter == 3 && current.CharacterSelected))) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
-		return true;
+		return settings["ClockTowerGold"];
 	}
 
 	// split after boss rush
 	if (vars.BossKillCounter == 9 && current.StageID == 18) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
-		return true;
+		return settings["ToFBossRush"];
 	}
 
-	// Enchantress Split
+	// Enchantress Split Phase 1
+	if (current.StageID == 19 && vars.BossKillCounter == 1 && vars.BossRecentlyDefeated) {
+		vars.BossRecentlyDefeated = false;
+		return settings["ToFEnchantress1"];
+	}
+
+	// Enchantress Split Phase 2
 	if (current.StageID == 19 && vars.BossKillCounter == 2) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
-		return true;
+		return settings["ToFEnchantress2"];
 	}
 
 }
