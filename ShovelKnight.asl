@@ -1,7 +1,7 @@
 state("ShovelKnight", "Version 2.4A")
 {
 	// Player stats
-	byte CharacterSelected : 0x4CEB04; // 0 for Shovel Knight, 1 for Plague Knight
+	bool CharacterSelected : 0x4CEB04; // false for Shovel Knight, true for Plague Knight
 	uint PlayerGold : 0x4CEB14; // S
 	float HPPlayerDisplay : 0x4CC0EC, 0x94, 0x420 /*blazeit*/, 0x18, 0x2C; // Display for player life at top of screen
 
@@ -12,9 +12,14 @@ state("ShovelKnight", "Version 2.4A")
 	byte SaveSlot : 0x4CEDE8; // 9 in title, becomes (saveslot - 1) when "yes" is pressed -- this is 0-based
 
 	/* List of stage IDs:
-	8: The Plains (✓)
-	9: Pridemoor Keep (✓)
-	10: The Lich Yard (✓)
+	8: The Plains (Black Knight) (✓)
+	9: Pridemoor Keep (King Knight) (✓)
+	10: The Lich Yard (Specter Knight) (✓)
+	11: The Explodatorium (Plague Knight) (✓)
+	12: Iron Whale (Treasure Knight) (✓)
+	13: Lost City (Mole Knight) (✓)
+	14: Clockwork Tower (Tinker Knight) (Ｘ)
+	15: Stranded Ship (Polar Knight) (✓)
 	*/
 
 	// Boss HPs
@@ -24,8 +29,17 @@ state("ShovelKnight", "Version 2.4A")
 
 startup
 {
-	settings.Add("splits", true, "Splits");
+	// SETTINGS START
+	// Header settings
+	settings.Add("Splits", true, "Splits");
+	settings.Add("SplitsGold", true, "Boss Splits (on gold)", "Splits");
+	settings.Add("SplitsFadeOut", false, "Boss Splits (on fadeout)", "Splits");
+	// SETTINGS END
+}
 
+init 
+{
+	// CUSTOM/PLACEHOLDER VARIABLES START
 	vars.BossRecentlyDefeated = false;
 	vars.BossKillCounter = 0;
 
@@ -55,11 +69,8 @@ startup
 		"57",
 		"8D 71 1D"
 		);	*/
-}
 
-init 
-{
-
+	// CUSTOM/PLACEHOLDER VARIABLES END
 }
 
 update
@@ -76,6 +87,7 @@ update
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 	}
+
 
 }
 
@@ -105,9 +117,13 @@ split
 			case 10:
 				// The Lich Yard
 			case 11:
+				// The Explodatorium
 			case 12:
+				// Iron Whale
 			case 13:
+				// Lost City
 			case 15:
+				// Stranded Ship
 			case 16:
 			case 17:
 				return true;
@@ -118,13 +134,16 @@ split
 		}
 	}
 	// split after boss rush (broken)
-	else if (vars.BossKillCounter == 9 && vars.StageID == 18) {
+	if (vars.BossKillCounter == 9 && vars.StageID == 18) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 		return true;
 	}
 	// split after Tinker (broken)
-	else if (current.StageID == 14 && ((vars.BossKillCounter == 2 && current.CharacterSelected == 0) || (current.CharacterSelected == 1 && vars.BossKillCounter == 3))) {
+	// if we're in the Clockwork Tower and we've gone through 2 phases as SK, or 3 as PK
+	if (current.StageID == 14 && 
+	((vars.BossKillCounter == 2 && current.CharacterSelected) || 
+	(vars.BossKillCounter == 3 && !current.CharacterSelected))) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 		return true;
