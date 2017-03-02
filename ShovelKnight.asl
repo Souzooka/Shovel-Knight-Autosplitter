@@ -18,8 +18,9 @@ state("ShovelKnight", "Version 2.4A")
 	11: The Explodatorium (Plague Knight) (✓)
 	12: Iron Whale (Treasure Knight) (✓)
 	13: Lost City (Mole Knight) (✓)
-	14: Clockwork Tower (Tinker Knight) (Ｘ)
+	14: Clockwork Tower (Tinker Knight) (✓)
 	15: Stranded Ship (Polar Knight) (✓)
+	16: Flying Machine (Propeller Knight) (✓)
 	*/
 
 	// Boss HPs
@@ -83,11 +84,10 @@ update
 	}
 
 	// if the HP display isn't shown (as result of going to map, dying, or going to title), reset counter vars
-	if (current.HPPlayerDisplay == null) {
+	if (current.HPPlayerDisplay == null || current.HPPlayerDisplay == 0) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 	}
-
 
 }
 
@@ -106,28 +106,56 @@ reset
 split
 {
 	// split on getting gold after every required boss
+	// returns are placeholders for settings
+	// we do not want vars.BossRecentlyDefeated and vars.BossKillCounter to get reset in undefined stages
 	if (vars.BossRecentlyDefeated && current.PlayerGold > old.PlayerGold) {
-		vars.BossRecentlyDefeated = false;
-		vars.BossKillCounter = 0;
 		switch((uint)current.StageID) {
 			case 8:
 				// The Plains
+				vars.BossRecentlyDefeated = false;
+				vars.BossKillCounter = 0;
+				return true;
 			case 9:
 				// Pridemoor Keep
+				vars.BossRecentlyDefeated = false;
+				vars.BossKillCounter = 0;
+				return true;
 			case 10:
 				// The Lich Yard
+				vars.BossRecentlyDefeated = false;
+				vars.BossKillCounter = 0;
+				return true;
 			case 11:
 				// The Explodatorium
+				vars.BossRecentlyDefeated = false;
+				vars.BossKillCounter = 0;
+				return true;
 			case 12:
 				// Iron Whale
+				vars.BossRecentlyDefeated = false;
+				vars.BossKillCounter = 0;
+				return true;
 			case 13:
 				// Lost City
+				vars.BossRecentlyDefeated = false;
+				vars.BossKillCounter = 0;
+				return true;
 			case 15:
 				// Stranded Ship
+				vars.BossRecentlyDefeated = false;
+				vars.BossKillCounter = 0;
+				return true;
 			case 16:
+				vars.BossRecentlyDefeated = false;
+				vars.BossKillCounter = 0;
+				return true;
 			case 17:
+				vars.BossRecentlyDefeated = false;
+				vars.BossKillCounter = 0;
 				return true;
 			case 38:
+				vars.BossRecentlyDefeated = false;
+				vars.BossKillCounter = 0;
 				return current.CharacterSelected == 1;
 			default:
 				return false;
@@ -141,9 +169,9 @@ split
 	}
 	// split after Tinker (broken)
 	// if we're in the Clockwork Tower and we've gone through 2 phases as SK, or 3 as PK
-	if (current.StageID == 14 && 
-	((vars.BossKillCounter == 2 && current.CharacterSelected) || 
-	(vars.BossKillCounter == 3 && !current.CharacterSelected))) {
+	if (current.StageID == 14 && current.PlayerGold > old.PlayerGold &&
+	((vars.BossKillCounter == 2 && !current.CharacterSelected) || 
+	(vars.BossKillCounter == 3 && current.CharacterSelected))) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 		return true;
