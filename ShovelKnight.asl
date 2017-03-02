@@ -21,6 +21,8 @@ state("ShovelKnight", "Version 2.4A")
 	14: Clockwork Tower (Tinker Knight) (✓)
 	15: Stranded Ship (Polar Knight) (✓)
 	16: Flying Machine (Propeller Knight) (✓)
+	17: Tower of Fate: Entrance (Black Knight EX) (✓)
+	18: Tower of Fate: Ascent
 	*/
 
 	// Boss HPs
@@ -146,10 +148,12 @@ split
 				vars.BossKillCounter = 0;
 				return true;
 			case 16:
+				// Flying Machine
 				vars.BossRecentlyDefeated = false;
 				vars.BossKillCounter = 0;
 				return true;
 			case 17:
+				// Tower of Fate: Entrance
 				vars.BossRecentlyDefeated = false;
 				vars.BossKillCounter = 0;
 				return true;
@@ -162,12 +166,12 @@ split
 		}
 	}
 	// split after boss rush (broken)
-	if (vars.BossKillCounter == 9 && vars.StageID == 18) {
+	if (vars.BossKillCounter == 9 && current.StageID == 18) {
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
 		return true;
 	}
-	// split after Tinker (broken)
+	// split after Tinker
 	// if we're in the Clockwork Tower and we've gone through 2 phases as SK, or 3 as PK
 	if (current.StageID == 14 && current.PlayerGold > old.PlayerGold &&
 	((vars.BossKillCounter == 2 && !current.CharacterSelected) || 
