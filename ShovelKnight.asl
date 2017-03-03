@@ -336,11 +336,6 @@ split
 		}
 	}
 
-	// split after Tinker
-	// if we're in the Clockwork Tower and we've gone through 2 phases as SK, or 3 as PK
-
-	print(vars.BossKillCounter.ToString());
-
 	// split after boss rush
 	if (vars.StageID.Current == 18 && vars.BossKillCounter == 9 && vars.BossRecentlyDefeated) {
 		vars.BossRecentlyDefeated = false;
