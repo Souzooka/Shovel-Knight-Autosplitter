@@ -337,7 +337,8 @@ split
 	}
 
 	// split after boss rush
-	if (vars.StageID.Current == 18 && vars.BossKillCounter == 9) {
+	if (vars.StageID.Current == 18 && vars.BossKillCounter == 9 && vars.BossRecentlyDefeated) {
+		vars.BossRecentlyDefeated = false;
 		return settings["ToFBossRush"];
 	}
 
@@ -348,7 +349,8 @@ split
 	}
 
 	// Enchantress Split Phase 2
-	if (vars.StageID.Current == 19 && vars.BossKillCounter == 2) {
+	if (vars.StageID.Current == 19 && vars.BossKillCounter == 2 && vars.BossRecentlyDefeated) {
+		vars.BossRecentlyDefeated = false;
 		return settings["ToFEnchantress2"];
 	}
 
