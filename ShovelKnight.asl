@@ -311,6 +311,14 @@ split
 			case 13:
 				// Lost City
 				return settings["LostCityGold"];
+			case 14:
+				if (vars.PlagueKnight.Current) {
+					return settings["ClockTowerGold"] && vars.BossKillCounter == 3;
+				}
+				else if (!vars.PlagueKnight.Current) {
+					return settings["ClockTowerGold"] && vars.BossKillCounter == 2;
+				}
+				break;
 			case 15:
 				// Stranded Ship
 				return settings["StrandedShipGold"];
@@ -330,11 +338,8 @@ split
 
 	// split after Tinker
 	// if we're in the Clockwork Tower and we've gone through 2 phases as SK, or 3 as PK
-	if (vars.StageID.Current == 14 && vars.PlayerGold.Current > vars.PlayerGold.Old &&
-	((vars.BossKillCounter == 2 && !vars.PlagueKnight.Current) || 
-	(vars.BossKillCounter == 3 && vars.PlagueKnight.Current))) {
-		return settings["ClockTowerGold"];
-	}
+
+	print(vars.BossKillCounter.ToString());
 
 	// split after boss rush
 	if (vars.StageID.Current == 18 && vars.BossKillCounter == 9 && vars.BossRecentlyDefeated) {
