@@ -53,7 +53,7 @@ startup
 
 	// On Fade Out Boss Splits
 	settings.Add("PlainsFadeOut", true, "The Plains", "SplitsFadeOut");
-	settings.Add("PridemoorKeepFadeOut", true, "PrideMoor Keep", "SplitsFadeOut");
+	settings.Add("PridemoorKeepFadeOut", true, "Pridemoor Keep", "SplitsFadeOut");
 	settings.Add("LichYardFadeOut", true, "Lich Yard", "SplitsFadeOut");
 	settings.Add("ExplodatoriumFadeOut", true, "Explodatorium", "SplitsFadeOut");
 	settings.Add("IronWhaleFadeOut", true, "Iron Whale", "SplitsFadeOut");
@@ -330,7 +330,7 @@ split
 
 	// split after Tinker
 	// if we're in the Clockwork Tower and we've gone through 2 phases as SK, or 3 as PK
-	if (vars.StageID.Current == 14 && current.PlayerGold > old.PlayerGold &&
+	if (vars.StageID.Current == 14 && vars.PlayerGold.Current > vars.PlayerGold.Old &&
 	((vars.BossKillCounter == 2 && !vars.PlagueKnight.Current) || 
 	(vars.BossKillCounter == 3 && vars.PlagueKnight.Current))) {
 		return settings["ClockTowerGold"];
