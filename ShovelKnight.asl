@@ -35,8 +35,21 @@ startup
 	// SETTINGS START
 	// Header settings
 	settings.Add("Splits", true, "Splits");
+	settings.Add("SplitsStage", false, "Stage Splits (on boss activation)", "Splits");
 	settings.Add("SplitsGold", true, "Boss Splits (on gold)", "Splits");
 	settings.Add("SplitsFadeOut", false, "Boss Splits (on fadeout) (not implemented)", "Splits");
+
+	// On Stage Splits
+	settings.Add("PlainsStage", true, "The Plains", "SplitsStage");
+	settings.Add("PridemoorKeepStage", true, "PrideMoor Keep", "SplitsStage");
+	settings.Add("LichYardStage", true, "Lich Yard", "SplitsStage");
+	settings.Add("ExplodatoriumStage", true, "Explodatorium", "SplitsStage");
+	settings.Add("IronWhaleStage", true, "Iron Whale", "SplitsStage");
+	settings.Add("LostCityStage", true, "Lost City", "SplitsStage");
+	settings.Add("ClockTowerStage", true, "Clock Tower", "SplitsStage");
+	settings.Add("StrandedShipStage", true, "Stranded Ship", "SplitsStage");
+	settings.Add("FlyingMachineStage", true, "Flying Machine", "SplitsStage");
+	settings.Add("ToFEntranceStage", true, "Tower of Fate: Entrance", "SplitsStage");
 
 	// On Gold Boss Splits
 	settings.Add("PlainsGold", true, "The Plains", "SplitsGold");
@@ -109,6 +122,17 @@ init
 	vars.SaveSlotAddr = IntPtr.Zero;
 	vars.HPPlayerDisplayAddr = (IntPtr)0x2C;
 	vars.HPBossDisplayAddr = (IntPtr)0x2C;
+
+	vars.PlainsStage = false;
+	vars.PridemoorKeepStage = false;
+	vars.LichYardStage = false;
+	vars.ExplodatoriumStage = false;
+	vars.IronWhaleStage = false;
+	vars.LostCityStage = false;
+	vars.ClockTowerStage = false;
+	vars.StrandedShipStage = false;
+	vars.FlyingMachineStage = false;
+	vars.ToFEntranceStage = false;
 
 	// REMINDER: The base address is always the same in each instance of the same version. You only need to scan for it in init when the game is loaded, and never again!
 	// REMINDER: The only things which may need readjusting are the pointer values.
@@ -326,6 +350,19 @@ update
 		vars.BossKillCounter = 0;
 	}
 
+	if (timer.CurrentPhase == TimerPhase.NotRunning) {
+	vars.PlainsStage = false;
+	vars.PridemoorKeepStage = false;
+	vars.LichYardStage = false;
+	vars.ExplodatoriumStage = false;
+	vars.IronWhaleStage = false;
+	vars.LostCityStage = false;
+	vars.ClockTowerStage = false;
+	vars.StrandedShipStage = false;
+	vars.FlyingMachineStage = false;
+	vars.ToFEntranceStage = false;
+	}
+
 	vars.watchers.UpdateAll(game);
 }
 
@@ -343,6 +380,84 @@ reset
 
 split
 {
+	// Stage splits
+	if (vars.HPBossDisplay.Old == 0 && vars.HPBossDisplay.Current > 0) {
+		switch((uint)vars.StageID.Current) {
+			case 8:
+				// The Plains
+				if (!vars.PlainsStage) {
+					vars.PlainsStage = true;
+					return settings["PlainsStage"];
+				}
+				break;
+			case 9:
+				// Pridemoor Keep
+				if (!vars.PridemoorKeepStage) {
+					vars.PridemoorKeepStage = true;
+					return settings["PridemoorKeepStage"];
+				}
+				break;
+			case 10:
+				// The Lich Yard
+				if (!vars.LichYardStage) {
+					vars.LichYardStage = true;
+					return settings["LichYardStage"];
+				}
+				break;
+			case 11:
+				// The Explodatorium
+				if (!vars.ExplodatoriumStage) {
+					vars.ExplodatoriumStage = true;
+					return settings["ExplodatoriumStage"];
+				}
+				break;
+			case 12:
+				// Iron Whale
+				if (!vars.IronWhaleStage) {
+					vars.IronWhaleStage = true;
+					return settings["IronWhaleStage"];
+				}
+				break;
+			case 13:
+				// Lost City
+				if (!vars.LostCityStage) {
+					vars.LostCityStage = true;
+					return settings["LostCityStage"];
+				}
+				break;
+			case 14:
+				// Clock Tower
+				if (!vars.ClockTowerStage) {
+					vars.ClockTowerStage = true;
+					return settings["ClockTowerStage"];
+				}
+				break;
+			case 15:
+				// Stranded Ship
+				if (!vars.StrandedShipStage) {
+					vars.StrandedShipStage = true;
+					return settings["StrandedShipStage"];
+				}
+				break;
+			case 16:
+				// Flying Machine
+				if (!vars.FlyingMachineStage) {
+					vars.FlyingMachineStage = true;
+					return settings["FlyingMachineStage"];
+				}
+				break;
+			case 17:
+				// Tower of Fate: Entrance
+				if (!vars.ToFEntranceStage) {
+					vars.ToFEntranceStage = true;
+					return settings["ToFEntranceStage"];
+				}
+				break;
+			default:
+				return false;
+		}
+	}
+
 	// split on getting gold after every required boss
 	// we do not want vars.BossRecentlyDefeated and vars.BossKillCounter to get reset in undefined stages
 	if (vars.BossRecentlyDefeated && vars.PlayerGold.Current > vars.PlayerGold.Old) {
@@ -366,6 +481,7 @@ split
 				// Lost City
 				return settings["LostCityGold"];
 			case 14:
+				// Clock Tower
 				if (vars.PlagueKnight.Current) {
 					return settings["ClockTowerGold"] && vars.BossKillCounter == 3;
 				}
