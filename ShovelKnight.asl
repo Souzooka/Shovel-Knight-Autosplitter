@@ -14,7 +14,7 @@
 	38: Black Knight 2 (✓)
 	*/
 
-state("ShovelKnight", "Version 2.4A")
+state("ShovelKnight")
 {
 	// Player stats
 /*	bool PlagueKnight : 0x4CEB04; // false for Shovel Knight, true for Plague Knight*/
@@ -37,11 +37,12 @@ startup
 	settings.Add("Splits", true, "Splits");
 	settings.Add("SplitsStage", false, "Stage Splits (on boss activation)", "Splits");
 	settings.Add("SplitsGold", true, "Boss Splits (on gold)", "Splits");
+	settings.Add("SplitsKill", true, "Boss Splits (on kill)", "Splits");
 	settings.Add("SplitsFadeOut", false, "Boss Splits (on fadeout) (not implemented)", "Splits");
 
 	// On Stage Splits
 	settings.Add("PlainsStage", true, "The Plains", "SplitsStage");
-	settings.Add("PridemoorKeepStage", true, "PrideMoor Keep", "SplitsStage");
+	settings.Add("PridemoorKeepStage", true, "Pridemoor Keep", "SplitsStage");
 	settings.Add("LichYardStage", true, "Lich Yard", "SplitsStage");
 	settings.Add("ExplodatoriumStage", true, "Explodatorium", "SplitsStage");
 	settings.Add("IronWhaleStage", true, "Iron Whale", "SplitsStage");
@@ -54,17 +55,33 @@ startup
 	settings.Add("ToFEnchantressStage", true, "Tower of Fate: ????????", "SplitsStage");
 
 	// On Gold Boss Splits
-	settings.Add("PlainsGold", true, "The Plains", "SplitsGold");
-	settings.Add("PridemoorKeepGold", true, "PrideMoor Keep", "SplitsGold");
-	settings.Add("LichYardGold", true, "Lich Yard", "SplitsGold");
-	settings.Add("ExplodatoriumGold", true, "Explodatorium", "SplitsGold");
-	settings.Add("IronWhaleGold", true, "Iron Whale", "SplitsGold");
-	settings.Add("LostCityGold", true, "Lost City", "SplitsGold");
-	settings.Add("ClockTowerGold", true, "Clock Tower", "SplitsGold");
-	settings.Add("StrandedShipGold", true, "Stranded Ship", "SplitsGold");
-	settings.Add("FlyingMachineGold", true, "Flying Machine", "SplitsGold");
-	settings.Add("ToFEntranceGold", true, "Tower of Fate: Entrance", "SplitsGold");
+	settings.Add("PlainsGold", true, "Black Knight 1 (The Plains)", "SplitsGold");
+	settings.Add("PridemoorKeepGold", true, "King Knight (Pridemoor Keep)", "SplitsGold");
+	settings.Add("LichYardGold", true, "Specter Knight (Lich Yard)", "SplitsGold");
+	settings.Add("ExplodatoriumGold", true, "Plague Knight (Explodatorium)", "SplitsGold");
+	settings.Add("IronWhaleGold", true, "Treasure Knight (Iron Whale)", "SplitsGold");
+	settings.Add("LostCityGold", true, "Mole Knight (Lost City)", "SplitsGold");
+	settings.Add("ClockTowerGold", true, "Tinker Knight (Clock Tower)", "SplitsGold");
+	settings.Add("StrandedShipGold", true, "Polar Knight (Stranded Ship)", "SplitsGold");
+	settings.Add("FlyingMachineGold", true, "Propeller Knight (Flying Machine)", "SplitsGold");
+	settings.Add("ToFEntranceGold", true, "Black Knight 3 (Tower of Fate: Entrance)", "SplitsGold");
 	settings.Add("BlackKnight2Gold", true, "Black Knight 2 (PK Only)", "SplitsGold");
+
+	// On Kill Splits
+	settings.Add("PlainsKill", false, "Black Knight 1 (The Plains)", "SplitsKill");
+	settings.Add("PridemoorKeepKill", false, "King Knight (Pridemoor Keep)", "SplitsKill");
+	settings.Add("LichYardKill", false, "Specter Knight (Lich Yard)", "SplitsKill");
+	settings.Add("ExplodatoriumKill", false, "Plague Knight (Explodatorium)", "SplitsKill");
+	settings.Add("IronWhaleKill", false, "Treasure Knight (Iron Whale)", "SplitsKill");
+	settings.Add("LostCityKill", false, "Mole Knight (Lost City)", "SplitsKill");
+	settings.Add("ClockTowerKill", false, "Tinker Knight (Clock Tower)", "SplitsKill");
+	settings.Add("StrandedShipKill", false, "Polar Knight (Stranded Ship)", "SplitsKill");
+	settings.Add("FlyingMachineKill", false, "Propeller Knight (Flying Machine)", "SplitsKill");
+	settings.Add("ToFEntranceKill", false, "Black Knight 3 (Tower of Fate: Entrance)", "SplitsKill");
+	settings.Add("BlackKnight2Kill", false, "Black Knight 2 (PK Only)", "SplitsKill");
+	settings.Add("ToFBossRushKill", true, "Boss Rush (Tower of Fate: Ascent)", "SplitsKill");
+	settings.Add("ToFEnchantress1Kill", true, "Enchantress 1 (Tower of Fate: ????????)", "SplitsKill");
+	settings.Add("ToFEnchantress2Kill", true, "Enchantress 2 (Tower of Fate: ????????)", "SplitsKill");
 
 	// On Fade Out Boss Splits
 	settings.Add("PlainsFadeOut", true, "The Plains", "SplitsFadeOut");
@@ -78,11 +95,6 @@ startup
 	settings.Add("FlyingMachineFadeOut", true, "Flying Machine", "SplitsFadeOut");
 	settings.Add("ToFEntranceFadeOut", true, "Tower of Fate: Entrance", "SplitsFadeOut");
 	settings.Add("BlackKnight2FadeOut", true, "Black Knight 2 (PK Only)", "SplitsFadeOut");
-
-	// General Splits (add these to "On Kill")
-	settings.Add("ToFBossRush", true, "Boss Rush", "Splits");
-	settings.Add("ToFEnchantress1", false, "Enchantress Phase 1", "Splits");
-	settings.Add("ToFEnchantress2", true, "Enchantress Phase 2", "Splits");
 
 	// SETTINGS END
 }
@@ -137,6 +149,7 @@ init
 	vars.ToFEntranceStage = false;
 	vars.ToFBossRushStage = false;
 	vars.ToFEnchantressStage = false;
+	vars.ToFEnchantress1Kill = false;
 
 	// REMINDER: The base address is always the same in each instance of the same version. You only need to scan for it in init when the game is loaded, and never again!
 	// REMINDER: The only things which may need readjusting are the pointer values.
@@ -355,18 +368,19 @@ update
 	}
 
 	if (timer.CurrentPhase == TimerPhase.NotRunning) {
-	vars.PlainsStage = false;
-	vars.PridemoorKeepStage = false;
-	vars.LichYardStage = false;
-	vars.ExplodatoriumStage = false;
-	vars.IronWhaleStage = false;
-	vars.LostCityStage = false;
-	vars.ClockTowerStage = false;
-	vars.StrandedShipStage = false;
-	vars.FlyingMachineStage = false;
-	vars.ToFEntranceStage = false;
-	vars.ToFBossRushStage = false;
-	vars.ToFEnchantressStage = false;
+		vars.PlainsStage = false;
+		vars.PridemoorKeepStage = false;
+		vars.LichYardStage = false;
+		vars.ExplodatoriumStage = false;
+		vars.IronWhaleStage = false;
+		vars.LostCityStage = false;
+		vars.ClockTowerStage = false;
+		vars.StrandedShipStage = false;
+		vars.FlyingMachineStage = false;
+		vars.ToFEntranceStage = false;
+		vars.ToFBossRushStage = false;
+		vars.ToFEnchantressStage = false;
+		vars.ToFEnchantress1Kill = false;
 	}
 
 	vars.watchers.UpdateAll(game);
@@ -388,7 +402,7 @@ split
 {
 	// Stage splits
 	if (vars.HPBossDisplay.Old == 0 && vars.HPBossDisplay.Current > 0) {
-		switch((uint)vars.StageID.Current) {
+		switch((byte)vars.StageID.Current) {
 			case 8:
 				// The Plains
 				if (!vars.PlainsStage && vars.HPBossDisplay.Current != 8) {
@@ -470,7 +484,7 @@ split
 				// Tower of Fate: ????????
 				if (!vars.ToFEnchantressStage) {
 					vars.ToFEnchantressStage = true;
-					return settings["ToFEntranceStage"];
+					return settings["ToFEnchantressStage"];
 				}
 				break;
 			default:
@@ -481,7 +495,7 @@ split
 	// split on getting gold after every required boss
 	// we do not want vars.BossRecentlyDefeated and vars.BossKillCounter to get reset in undefined stages
 	if (vars.BossRecentlyDefeated && vars.PlayerGold.Current > vars.PlayerGold.Old) {
-		switch((uint)vars.StageID.Current) {
+		switch((byte)vars.StageID.Current) {
 			case 8:
 				// The Plains
 				return settings["PlainsGold"];
@@ -526,22 +540,64 @@ split
 		}
 	}
 
-	// split after boss rush
-	if (vars.StageID.Current == 18 && vars.BossKillCounter == 9 && vars.BossRecentlyDefeated) {
-		vars.BossRecentlyDefeated = false;
-		return settings["ToFBossRush"];
-	}
-
-	// Enchantress Split Phase 1
-	if (vars.StageID.Current == 19 && vars.BossKillCounter == 1 && vars.BossRecentlyDefeated) {
-		vars.BossRecentlyDefeated = false;
-		return settings["ToFEnchantress1"];
-	}
-
-	// Enchantress Split Phase 2
-	if (vars.StageID.Current == 19 && vars.BossKillCounter == 2 && vars.BossRecentlyDefeated) {
-		vars.BossRecentlyDefeated = false;
-		return settings["ToFEnchantress2"];
+	// On Kill splits
+	if (vars.HPBossDisplay.Current == 0 && vars.HPBossDisplay.Old != 0 && vars.HPPlayerDisplay.Current > 0) {
+		switch((byte)vars.StageID.Current) {
+			case 8:
+				// The Plains
+				return settings["PlainsKill"];
+			case 9:
+				// Pridemoor Keep
+				return settings["PridemoorKeepKill"];
+			case 10:
+				// The Lich Yard
+				return settings["LichYardKill"];
+			case 11:
+				// The Explodatorium
+				return settings["ExplodatoriumKill"];
+			case 12:
+				// Iron Whale
+				return settings["IronWhaleKill"];
+			case 13:
+				// Lost City
+				return settings["LostCityKill"];
+			case 14:
+				// Clock Tower
+				if (vars.PlagueKnight.Current) {
+					return settings["ClockTowerKill"] && vars.BossKillCounter == 3;
+				}
+				else if (!vars.PlagueKnight.Current) {
+					return settings["ClockTowerKill"] && vars.BossKillCounter == 2;
+				}
+				break;
+			case 15:
+				// Stranded Ship
+				return settings["StrandedShipKill"];
+			case 16:
+				// Flying Machine
+				return settings["FlyingMachineKill"];
+			case 17:
+				// Tower of Fate: Entrance
+				return settings["ToFEntranceKill"];
+			case 18:
+				// Tower of Fate: Ascent
+				return settings["ToFBossRushKill"];
+			case 19:
+				// Tower of Fate: ????????
+				if (!vars.ToFEnchantress1Kill && vars.BossKillCounter == 1) {
+					vars.ToFEnchantress1Kill = true;
+					return settings["ToFEnchantress1Kill"];
+				}
+				else if (vars.BossKillCounter == 2) {
+					return settings["ToFEnchantress2Kill"];
+				}
+				break;
+			case 38:
+				// Black Knight 2
+				return settings["BlackKnight2Kill"] && vars.PlagueKnight.Current;
+			default:
+				return false;
+		}
 	}
 
 }
