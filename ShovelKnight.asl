@@ -301,7 +301,7 @@ init
 
 		vars.Version = memory.ReadString((IntPtr)vars.VersionAddr, 256);
 
-		if (vars.Version.Length >= 7 && vars.Version.Substring(0, 7) == "version") {
+		if (vars.Version.Length > 7 && vars.Version.Substring(0, 7) == "version") {
 			vars.VersionFound = true;
 			version = vars.Version;
 			vars.VersionNumber = Convert.ToSingle(vars.Version.Substring(8, 3));
@@ -581,7 +581,7 @@ split
 				return settings["ToFEntranceKill"];
 			case 18:
 				// Tower of Fate: Ascent
-				return settings["ToFBossRushKill"];
+				return settings["ToFBossRushKill"] && vars.BossKillCounter == 9;
 			case 19:
 				// Tower of Fate: ????????
 				if (!vars.ToFEnchantress1Kill && vars.BossKillCounter == 1) {
