@@ -83,8 +83,13 @@ init
 	vars.BossRecentlyDefeated = false;
 	vars.BossKillCounter = 0;
 
+	vars.VersionFound = false;
+	vars.Version = "";
+	vars.VersionNumber = 2.4;
+
 	vars.RescanStaticStopwatch = new Stopwatch();
 	vars.RescanHPDisplayStopwatch = new Stopwatch();
+	vars.RescanVersionStopwatch = new Stopwatch();
 
 	vars.watchers = new MemoryWatcherList();
 
@@ -96,6 +101,7 @@ init
 	vars.HPBossDisplay = new MemoryWatcher<float>(IntPtr.Zero);
 
 	vars.HPPlayerDisplayCodeAddr = IntPtr.Zero;
+	vars.VersionCodeAddr = IntPtr.Zero;
 
 	vars.PlagueKnightAddr = IntPtr.Zero;
 	vars.PlayerGoldAddr = IntPtr.Zero;
@@ -145,6 +151,18 @@ init
 		"E8 ?? ?? ?? ??",
 		"E8 ?? ?? ?? ??",
 		"88 1D ?? ?? ?? ??");
+
+	// Version String offsets: 0x14, 0x34, 0x60
+	vars.VersionTarget = new SigScanTarget(2,
+		"8B 35 ?? ?? ?? ??",
+		"3B F3",
+		"74 16",
+		"90",
+		"8B 4E 04",
+		"8B 11",
+		"8B 52 04",
+		"8D 45 08",
+		"50");
 
 	// Note: Rescan pointers when stage ID changes
 
@@ -196,10 +214,10 @@ init
 		// Base address won't change, so check to prevent unnecessary scans
 		if ((IntPtr)vars.HPPlayerDisplayCodeAddr == IntPtr.Zero) {
 			vars.HPPlayerDisplayCodeAddr = scanner.Scan(vars.HPPlayerDisplayTarget);
-		}
 
-		vars.HPPlayerDisplayBaseAddr = memory.ReadValue<int>((IntPtr)vars.HPPlayerDisplayCodeAddr);
-		vars.HPBossDisplayBaseAddr = vars.HPPlayerDisplayBaseAddr;
+			vars.HPPlayerDisplayBaseAddr = memory.ReadValue<int>((IntPtr)vars.HPPlayerDisplayCodeAddr);
+			vars.HPBossDisplayBaseAddr = vars.HPPlayerDisplayBaseAddr;
+		}
 
 		vars.HPPlayerDisplayPointerLevel1 = memory.ReadValue<int>((IntPtr)vars.HPPlayerDisplayBaseAddr) + 0x94;
 		vars.HPBossDisplayPointerLevel1 = vars.HPPlayerDisplayPointerLevel1;
@@ -228,8 +246,30 @@ init
 		}
 	};
 
+	Action<string> RescanVersion = (text) => {
+		if ((IntPtr)vars.VersionCodeAddr == IntPtr.Zero) {
+			vars.VersionCodeAddr = scanner.Scan(vars.VersionTarget);
+			vars.VersionBaseAddr = memory.ReadValue<int>((IntPtr)vars.VersionCodeAddr);
+		}
+
+		vars.VersionPointerLevel1 = memory.ReadValue<int>((IntPtr)vars.VersionBaseAddr) + 0x14;
+
+		vars.VersionPointerLevel2 = memory.ReadValue<int>((IntPtr)vars.VersionPointerLevel1) + 0x34;
+
+		vars.VersionAddr = memory.ReadValue<int>((IntPtr)vars.VersionPointerLevel2) + 0x60;
+
+		vars.Version = memory.ReadString((IntPtr)vars.VersionAddr, 256);
+
+		if (vars.Version.Length >= 7 && vars.Version.Substring(0, 7) == "version") {
+			vars.VersionFound = true;
+			version = vars.Version;
+			vars.VersionNumber = Convert.ToSingle(vars.Version.Substring(8, 3));
+		}
+	};
+
 	vars.RescanStatic = RescanStatic;
 	vars.RescanHPDisplay = RescanHPDisplay;
+	vars.RescanVersion = RescanVersion;
 
 	// SCANNING ACTIONS END
 }
@@ -259,6 +299,20 @@ update
 		vars.RescanHPDisplay("");
 	}
 	// Rescan HP Display logic end
+
+	// Rescan Version logic start
+	// ONLY WORKS IF THE SCRIPT IS RUNNING BEFORE A SAVE IS SELECTED!
+	// There is no *real* way to automatically detect the version from what I've found.
+	// We want to know what the version is so in case the Specter Knight patch just renders the game into pieces, we might still be able to use one script for all executables.
+	if (!vars.VersionFound && !vars.RescanVersionStopwatch.IsRunning) {
+		vars.RescanVersionStopwatch.Start();
+	}
+
+	if (vars.RescanVersionStopwatch.ElapsedMilliseconds >= 500) {
+		vars.RescanVersionStopwatch.Reset();
+		vars.RescanVersion("");
+	}
+	// Rescan Version logic end
 
 	// current.HPPlayerDisplay does not become null when respawning
 	if (vars.HPBossDisplay.Current == 0 && vars.HPBossDisplay.Old != 0 && vars.HPPlayerDisplay.Current > 0) {
