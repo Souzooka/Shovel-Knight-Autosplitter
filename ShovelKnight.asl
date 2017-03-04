@@ -50,6 +50,8 @@ startup
 	settings.Add("StrandedShipStage", true, "Stranded Ship", "SplitsStage");
 	settings.Add("FlyingMachineStage", true, "Flying Machine", "SplitsStage");
 	settings.Add("ToFEntranceStage", true, "Tower of Fate: Entrance", "SplitsStage");
+	settings.Add("ToFBossRushStage", true, "Tower of Fate: Ascent", "SplitsStage");
+	settings.Add("ToFEnchantressStage", true, "Tower of Fate: ????????", "SplitsStage");
 
 	// On Gold Boss Splits
 	settings.Add("PlainsGold", true, "The Plains", "SplitsGold");
@@ -77,7 +79,7 @@ startup
 	settings.Add("ToFEntranceFadeOut", true, "Tower of Fate: Entrance", "SplitsFadeOut");
 	settings.Add("BlackKnight2FadeOut", true, "Black Knight 2 (PK Only)", "SplitsFadeOut");
 
-	// General Splits
+	// General Splits (add these to "On Kill")
 	settings.Add("ToFBossRush", true, "Boss Rush", "Splits");
 	settings.Add("ToFEnchantress1", false, "Enchantress Phase 1", "Splits");
 	settings.Add("ToFEnchantress2", true, "Enchantress Phase 2", "Splits");
@@ -133,6 +135,8 @@ init
 	vars.StrandedShipStage = false;
 	vars.FlyingMachineStage = false;
 	vars.ToFEntranceStage = false;
+	vars.ToFBossRushStage = false;
+	vars.ToFEnchantressStage = false;
 
 	// REMINDER: The base address is always the same in each instance of the same version. You only need to scan for it in init when the game is loaded, and never again!
 	// REMINDER: The only things which may need readjusting are the pointer values.
@@ -361,6 +365,8 @@ update
 	vars.StrandedShipStage = false;
 	vars.FlyingMachineStage = false;
 	vars.ToFEntranceStage = false;
+	vars.ToFBossRushStage = false;
+	vars.ToFEnchantressStage = false;
 	}
 
 	vars.watchers.UpdateAll(game);
@@ -450,6 +456,20 @@ split
 				// Tower of Fate: Entrance
 				if (!vars.ToFEntranceStage) {
 					vars.ToFEntranceStage = true;
+					return settings["ToFEntranceStage"];
+				}
+				break;
+			case 18:
+				// Tower of Fate: Ascent
+				if (!vars.ToFBossRushStage) {
+					vars.ToFBossRushStage = true;
+					return settings["ToFBossRushStage"];
+				}
+				break;
+			case 19:
+				// Tower of Fate: ????????
+				if (!vars.ToFEnchantressStage) {
+					vars.ToFEnchantressStage = true;
 					return settings["ToFEntranceStage"];
 				}
 				break;
