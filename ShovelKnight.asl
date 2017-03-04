@@ -391,7 +391,7 @@ split
 		switch((uint)vars.StageID.Current) {
 			case 8:
 				// The Plains
-				if (!vars.PlainsStage) {
+				if (!vars.PlainsStage && vars.HPBossDisplay.Current != 8) {
 					vars.PlainsStage = true;
 					return settings["PlainsStage"];
 				}
