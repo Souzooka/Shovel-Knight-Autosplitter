@@ -117,6 +117,7 @@ init
 	vars.RescanStaticStopwatch = new Stopwatch();
 	vars.RescanHPDisplayStopwatch = new Stopwatch();
 	vars.RescanVersionStopwatch = new Stopwatch();
+	vars.RecentlyDeadStopwatch = new Stopwatch();
 
 	vars.watchers = new MemoryWatcherList();
 
@@ -363,8 +364,14 @@ update
 
 	// if we're dead, or the pointer isn't being used (last offset is 0x2C, so it'll point to 0x0000002C in memory) (in map, title, etc.), reset these variables
 	if (vars.HPPlayerDisplay.Current == 0 || (IntPtr)vars.HPPlayerDisplayAddr == (IntPtr)0x2C) {
+		vars.RecentlyDeadStopwatch.Restart();
 		vars.BossRecentlyDefeated = false;
 		vars.BossKillCounter = 0;
+	}
+
+	// the Player HP can possibly be shown as boss HP for a frame after spawning, so add a check
+	if (vars.RecentlyDeadStopwatch.ElapsedMilliseconds >= 100) {
+		vars.RecentlyDeadStopwatch.Reset();
 	}
 
 	if (timer.CurrentPhase == TimerPhase.NotRunning) {
@@ -401,7 +408,7 @@ reset
 split
 {
 	// Stage splits
-	if (vars.HPBossDisplay.Old == 0 && vars.HPBossDisplay.Current > 0) {
+	if (vars.HPBossDisplay.Old == 0 && vars.HPBossDisplay.Current > 0 && !vars.RecentlyDeadStopwatch.IsRunning) {
 		switch((byte)vars.StageID.Current) {
 			case 8:
 				// The Plains
