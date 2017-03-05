@@ -356,7 +356,7 @@ update
 	// Rescan Version logic end
 
 	// current.HPPlayerDisplay does not become null when respawning
-	if (vars.HPBossDisplay.Current == 0 && vars.HPBossDisplay.Old != 0 && vars.HPPlayerDisplay.Current > 0) {
+	if (vars.HPBossDisplay.Current == 0 && vars.HPPlayerDisplay.Current > 0 && vars.HPBossDisplay.Old != 0) {
 		vars.BossRecentlyDefeated = true;
 		vars.BossKillCounter++;
 	}
