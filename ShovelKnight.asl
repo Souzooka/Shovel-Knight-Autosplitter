@@ -14,6 +14,15 @@
 	38: Black Knight 2 (✓)
 	*/
 
+	/*
+	SaveSlot (✓)
+	PlayerGold (in progress)
+	HPPlayerDisplay (Ｘ)
+	HPBossDisplay (Ｘ)
+	PlagueKnight (Ｘ)
+	StageID (Ｘ)
+	*/
+
 state("ShovelKnight")
 {
 	// Player stats
@@ -174,6 +183,26 @@ init
 		"A3 ?? ?? ?? ??", 		// Target Address
 		"5F");
 
+
+	// variables seem to change pointer paths between updates, so be a crazy person and scan for every single offset
+	// for 2.4A: 0x490B10, 0x360, 0x14, 0xCB4
+	vars.PlayerGoldLastOffsetTarget = new SigScanTarget(2,
+		"89 8B ?? ?? ?? ??",
+		"EB 06",
+		"89 93 ?? ?? ?? ??",
+		"8B 83 ?? ?? ?? ??",
+		"3D ?? ?? ?? ??",
+		"72 05");
+
+	// 0x10?
+	vars.PlayerGold2ndLastOffsetTarget = new SigScanTarget(2,
+		"8B 77 ??",
+		"89 3D ?? ?? ?? ??",
+		"85 F6",
+		"74 11",
+		"8B 4E 04",
+		"FF D2");
+
 	// StageID offsets: Static
 	vars.StageIDTarget = new SigScanTarget(2,
 		"89 1D ?? ?? ?? ??",
@@ -309,13 +338,15 @@ init
 	vars.RescanHPDisplay = RescanHPDisplay;
 	vars.RescanVersion = RescanVersion;
 
+	vars.testAddr = scanner.Scan(vars.PlayerGoldLastOffsetTarget);
+	vars.test = memory.ReadValue<int>((IntPtr)vars.testAddr); 
+
 	// SCANNING ACTIONS END
 }
 
 update
 {
 
-	print(vars.PlayerGold.Current.ToString());
 	// Note: "ShovelKnight.exe"+0x0 isn't a null area of memory 
 	// Rescan Static logic start (This shouldn't have to be used more than once!)
 	if ((IntPtr)vars.PlayerGoldAddr == IntPtr.Zero && !vars.RescanStaticStopwatch.IsRunning) {
