@@ -187,12 +187,8 @@ init
 
 	// SaveSlot offsets: Static
 	vars.SaveSlotTarget = new SigScanTarget(2,
-		"C6 05 ?? ?? ?? ?? 09",	// Target Address
-		"E8 ?? ?? ?? ??",
-		"68 ?? ?? ?? ??",
-		"E8 ?? ?? ?? ??",
-		"E8 ?? ?? ?? ??",
-		"88 1D ?? ?? ?? ??");
+		"C6 05 ?? ?? ?? ?? 09"	// Target Address
+		);
 
 	// Version String offsets: 0x14, 0x34, 0x60
 	vars.VersionTarget = new SigScanTarget(2,
@@ -318,6 +314,8 @@ init
 
 update
 {
+
+	print(vars.PlayerGold.Current.ToString());
 	// Note: "ShovelKnight.exe"+0x0 isn't a null area of memory 
 	// Rescan Static logic start (This shouldn't have to be used more than once!)
 	if ((IntPtr)vars.PlayerGoldAddr == IntPtr.Zero && !vars.RescanStaticStopwatch.IsRunning) {
