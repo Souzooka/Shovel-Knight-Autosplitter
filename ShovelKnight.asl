@@ -1,3 +1,59 @@
+	/*
+
+	Note from the author:
+
+	Hi, as of writing this I'll be occupied with a full-time software engineering educational activity for about 12 weeks, in 1 week.
+
+	If this script breaks on Specter, which unfortunately despite my efforts it may do, this script should be fixable with a few minutes in Cheat Engine nonetheless.
+	Simply declare a new state block with your updated values -- use memory.MainModuleSize or whatever it's called to determine the version.
+
+	Then all that needs to be done is to replace these variables in the update and split blocks -- you can ignore the scanning logic and all that.
+	(replace vars.PlayerGold.Current with current.PlayerGold, for example)
+
+	Notes on the variables:
+
+	SaveSlot:
+	This one is pretty stable -- it is used in the reset and start blocks for autostart and autoreset.
+	It should work across versions. If it breaks, however, it is a static byte which matches (saveslotselected - 1), and is 9 in the title.
+
+	PlayerGold:
+	Also a static value which matches your current gold.
+
+	HPPlayerDisplay:
+	This value is a dynamic value which changes addresses when changing stages, and has no pointers on the map screen.
+	This value is a float.
+	This is what is shown at the top of the HUD when in a stage.
+	This is not the actual player HP.
+
+	HPBossDisplay:
+	This value is a dynamic value which changes addresses when changing stages, and has no pointers on the map screen.
+	This value is a float.
+	This is what is shown at the top of the HUD when in a stage.
+	This is not the actual boss HP.
+
+	PlagueKnight:
+	Currently used as a boolean value, but will probably have a third state (2) when Specter comes out (?)
+	Static value and is used for some stage split checks
+
+	StageID:
+	Stage identifying the current stage the player is on
+	Doesn't seem to exist in 1.1 (?)
+
+	In most games, pointer offsets do not tend to change when they are updated -- however, this seems different in SK's case.
+	A big thanks to Shane for offering to put searchable patterns in memory -- this may actually help a lot with static values, but unfortunately it poses a few problems for dynamic memory and other values.
+
+	If you have any questions, feel free to PM me on Discord
+
+	Cheers,
+	Souzooka
+
+	P.S. I'll probably be implementing position-based splits for transitions into bossrooms as well, so SK's position values may have to be updated worst case as well.
+
+	*/
+
+
+
+
 	/* List of stage IDs:
 	8: The Plains (Black Knight) (✓)
 	9: Pridemoor Keep (King Knight) (✓)
