@@ -679,6 +679,22 @@ split
 				return settings["ExplodatoriumBossRoom"];
 			}
 			break;
+		case 12:
+			if (!vars.IronWhaleBossRoom && 
+					(vars.PlayerPosX.Current >= 836.7 && vars.PlayerPosX.Current <= 875) &&
+					(vars.PlayerPosY.Current >= -213 && vars.PlayerPosY.Current <= -195)) {
+				vars.IronWhaleBossRoom = true;
+				return settings["IronWhaleBossRoom"];
+			}
+			break;
+		case 13:
+			if (!vars.LostCityBossRoom && 
+					(vars.PlayerPosX.Current >= 878.4 && vars.PlayerPosX.Current <= 916) &&
+					(vars.PlayerPosY.Current >= -258 && vars.PlayerPosY.Current <= -240)) {
+				vars.LostCityBossRoom = true;
+				return settings["LostCityBossRoom"];
+			}
+			break;
 		default:
 			break;
 	}
