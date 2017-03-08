@@ -101,6 +101,7 @@ startup
 	// Header settings
 	settings.Add("Splits", true, "Splits");
 	settings.Add("SplitsStage", false, "Stage Splits (on boss activation)", "Splits");
+	settings.Add("SplitsBossRoom", false, "Stage Splits (on entering boss room)", "Splits");
 	settings.Add("SplitsGold", true, "Boss Splits (on gold)", "Splits");
 	settings.Add("SplitsKill", true, "Boss Splits (on kill)", "Splits");
 	settings.Add("SplitsFadeOut", false, "Boss Splits (on fadeout) (not implemented)", "Splits");
@@ -118,6 +119,9 @@ startup
 	settings.Add("ToFEntranceStage", true, "Tower of Fate: Entrance", "SplitsStage");
 	settings.Add("ToFBossRushStage", true, "Tower of Fate: Ascent", "SplitsStage");
 	settings.Add("ToFEnchantressStage", true, "Tower of Fate: ????????", "SplitsStage");
+
+	// On Bossroom Splits
+	settings.Add("PlainsBossRoom", false, "The Plains", "SplitsBossRoom");
 
 	// On Gold Boss Splits
 	settings.Add("PlainsGold", true, "Black Knight 1 (The Plains)", "SplitsGold");
@@ -192,6 +196,8 @@ init
 	vars.SaveSlot = new MemoryWatcher<byte>(IntPtr.Zero);
 	vars.HPPlayerDisplay = new MemoryWatcher<float>(IntPtr.Zero);
 	vars.HPBossDisplay = new MemoryWatcher<float>(IntPtr.Zero);
+	vars.PlayerPosX = new MemoryWatcher<float>(IntPtr.Zero);
+	vars.PlayerPosY = new MemoryWatcher<float>(IntPtr.Zero);
 
 	vars.HPPlayerDisplayCodeAddr = IntPtr.Zero;
 	vars.VersionCodeAddr = IntPtr.Zero;
@@ -202,6 +208,7 @@ init
 	vars.SaveSlotAddr = IntPtr.Zero;
 	vars.HPPlayerDisplayAddr = (IntPtr)0x2C;
 	vars.HPBossDisplayAddr = (IntPtr)0x2C;
+	vars.PlayerPosXAddr = (IntPtr)0xC;
 
 	vars.PlainsStage = false;
 	vars.PridemoorKeepStage = false;
@@ -215,6 +222,7 @@ init
 	vars.ToFEntranceStage = false;
 	vars.ToFBossRushStage = false;
 	vars.ToFEnchantressStage = false;
+	vars.PlainsBossRoom = false;
 	vars.ToFEnchantress1Kill = false;
 
 	// REMINDER: The base address is always the same in each instance of the same version. You only need to scan for it in init when the game is loaded, and never again!
@@ -367,6 +375,28 @@ init
 				vars.HPBossDisplay
 			});
 		}
+
+		vars.PlayerPosPointerLevel1 = memory.ReadValue<int>((IntPtr)vars.HPPlayerDisplayBaseAddr) + 0x84;
+		vars.PlayerPosPointerLevel2 = memory.ReadValue<int>((IntPtr)vars.PlayerPosPointerLevel1) + 0xB40;
+		vars.PlayerPosPointerLevel3 = memory.ReadValue<int>((IntPtr)vars.PlayerPosPointerLevel2) + 0x20;
+
+		vars.PlayerPosXAddrOld = vars.PlayerPosXAddr;
+
+		vars.PlayerPosXAddr = memory.ReadValue<int>((IntPtr)vars.PlayerPosPointerLevel3) + 0xC;
+		vars.PlayerPosYAddr = memory.ReadValue<int>((IntPtr)vars.PlayerPosPointerLevel3) + 0x10;
+
+		if ((IntPtr)vars.PlayerPosXAddrOld == (IntPtr)0xC && (IntPtr)vars.PlayerPosXAddr != (IntPtr)0xC) {
+
+			vars.PlayerPosX = new MemoryWatcher<float>((IntPtr)vars.PlayerPosXAddr);
+			vars.PlayerPosY = new MemoryWatcher<float>((IntPtr)vars.PlayerPosYAddr);
+
+			vars.watchers.AddRange(new MemoryWatcher[]
+			{
+				vars.PlayerPosX,
+				vars.PlayerPosY
+			});
+		}
+
 	};
 
 	Action<string> RescanVersion = (text) => {
@@ -402,7 +432,6 @@ init
 
 update
 {
-
 	// Note: "ShovelKnight.exe"+0x0 isn't a null area of memory 
 	// Rescan Static logic start (This shouldn't have to be used more than once!)
 	if ((IntPtr)vars.PlayerGoldAddr == IntPtr.Zero && !vars.RescanStaticStopwatch.IsRunning) {
@@ -420,8 +449,8 @@ update
 		vars.RescanHPDisplayStopwatch.Start();
 	}
 
-	// Rescan Pointer paths every 1 second -- this logic shouldn't cause any problems
-	if (vars.RescanHPDisplayStopwatch.ElapsedMilliseconds >= 1000) {
+	// Rescan Pointer paths every 0.1 second -- this logic shouldn't cause any problems
+	if (vars.RescanHPDisplayStopwatch.ElapsedMilliseconds >= 100) {
 		vars.RescanHPDisplayStopwatch.Reset();
 		vars.RescanHPDisplay("");
 	}
@@ -472,6 +501,7 @@ update
 		vars.ToFEntranceStage = false;
 		vars.ToFBossRushStage = false;
 		vars.ToFEnchantressStage = false;
+		vars.PlainsBossRoom = false;
 		vars.ToFEnchantress1Kill = false;
 	}
 
@@ -582,6 +612,20 @@ split
 			default:
 				return false;
 		}
+	}
+
+	// Bossroom transition splits
+	switch((byte)vars.StageID.Current) {
+		case 8:
+			if (!vars.PlainsBossRoom && 
+					(vars.PlayerPosX.Current >= 718 && vars.PlayerPosX.Current <= 750) &&
+					(vars.PlayerPosY.Current >= -407 && vars.PlayerPosY.Current <= -370)) {
+				vars.PlainsBossRoom = true;
+				return settings["PlainsBossRoom"];
+			}
+			break;
+		default:
+			break;
 	}
 
 	// split on getting gold after every required boss
