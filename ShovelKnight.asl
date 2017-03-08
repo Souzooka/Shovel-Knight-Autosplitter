@@ -290,15 +290,11 @@ init
 		"FF D2");
 
 	// StageID offsets: Static
-	vars.StageIDTarget = new SigScanTarget(2,
-		"89 1D ?? ?? ?? ??",
-		"89 1D ?? ?? ?? ??",
-		"89 1D ?? ?? ?? ??",
-		"3B C3",
-		"74 0C",
-		"50",
-		"FF D6",
-		"83 C4 04");
+	vars.StageIDTarget = new SigScanTarget(1,
+		"A3 ?? ?? ?? ??",
+		"C6 05 ?? ?? ?? ?? 00",
+		"89 8E ?? ?? ?? ??",
+		"C6 86 ?? ?? ?? ?? 01");
 
 	// SaveSlot offsets: Static
 	vars.SaveSlotTarget = new SigScanTarget(2,
@@ -856,6 +852,50 @@ split
 				return settings["BlackKnight2Kill"] && vars.PlagueKnight.Current;
 			default:
 				return false;
+		}
+	}
+
+	// Stage Fadeout Splits
+	if (vars.StageID.Current == 24 || vars.StageID.Current == 126 && vars.StageID.Old != 24) {
+		switch ((byte)vars.StageID.Old) {
+			case 8:
+				// The Plains
+				return settings["PlainsFadeOut"] && vars.StageID.Current == 24;
+			case 9:
+				// Pridemoor Keep
+				return settings["PridemoorKeepFadeOut"] && vars.StageID.Current == 24;
+			case 10:
+				// The Lich Yard
+				return settings["LichYardFadeOut"] && vars.StageID.Current == 24;
+			case 11:
+				// The Explodatorium
+				return settings["ExplodatoriumFadeOut"] && vars.StageID.Current == 24;
+			case 12:
+				// Iron Whale
+				return settings["IronWhaleFadeOut"] && vars.StageID.Current == 24;
+			case 13:
+				// Lost City
+				return settings["LostCityFadeOut"] && vars.StageID.Current == 24;
+			case 14:
+				// Clock Tower
+				return settings["ClockTowerFadeOut"] && vars.StageID.Current == 24;
+			case 15:
+				// Stranded Ship
+				return settings["StrandedShipFadeOut"] && vars.StageID.Current == 24;
+			case 16:
+				// Flying Machine
+				return settings["FlyingMachineFadeOut"] && vars.StageID.Current == 24;
+			case 17:
+				// Tower of Fate: Entrance
+				return settings["ToFEntranceFadeOut"] && vars.StageID.Current == 126;
+			case 18:
+				// Tower of Fate: Ascent
+				return settings["ToFBossRushFadeOut"] && vars.StageID.Current == 126;
+			case 38:
+				// Black Knight 2
+				return settings["BlackKnight2FadeOut"] && vars.StageID.Current == 126;
+			default:
+				break;
 		}
 	}
 
