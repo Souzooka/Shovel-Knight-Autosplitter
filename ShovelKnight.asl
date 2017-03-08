@@ -105,6 +105,7 @@ startup
 	settings.Add("SplitsGold", true, "Boss Splits (on gold)", "Splits");
 	settings.Add("SplitsKill", true, "Boss Splits (on kill)", "Splits");
 	settings.Add("SplitsFadeOut", false, "Boss Splits (on fadeout)", "Splits");
+	settings.Add("SplitsDreams", false, "Dream Splits", "Splits");
 
 	// On Stage Splits
 	settings.Add("PlainsStage", true, "The Plains", "SplitsStage");
@@ -175,6 +176,11 @@ startup
 	settings.Add("FlyingMachineFadeOut", true, "Flying Machine", "SplitsFadeOut");
 	settings.Add("ToFEntranceFadeOut", true, "Tower of Fate: Entrance", "SplitsFadeOut");
 	settings.Add("BlackKnight2FadeOut", true, "Black Knight 2 (PK Only)", "SplitsFadeOut");
+
+	// Dream Splits
+	settings.Add("Dream1", true, "Dream 1", "SplitsDreams");
+	settings.Add("Dream2", true, "Dream 2", "SplitsDreams");
+	settings.Add("Dream3", true, "Dream 3", "SplitsDreams");
 
 	// SETTINGS END
 }
@@ -249,6 +255,7 @@ init
 	vars.ToFEntranceFadeOut = false;
 	vars.ToFBossRushFadeOut = false;
 	vars.BlackKnight2FadeOut = false;
+	vars.StagesCount = 0;
 
 	// REMINDER: The base address is always the same in each instance of the same version. You only need to scan for it in init when the game is loaded, and never again!
 	// REMINDER: The only things which may need readjusting are the pointer values.
@@ -540,6 +547,7 @@ update
 		vars.ToFEntranceFadeOut = false;
 		vars.ToFBossRushFadeOut = false;
 		vars.BlackKnight2FadeOut = false;
+		vars.StagesCount = 0;
 	}
 
 	
@@ -866,34 +874,44 @@ split
 		switch ((byte)vars.StageID.Old) {
 			case 8:
 				// The Plains
+				vars.StagesCount++;
 				return settings["PlainsFadeOut"] && vars.StageID.Current == 24;
 			case 9:
 				// Pridemoor Keep
+				vars.StagesCount++;
 				return settings["PridemoorKeepFadeOut"] && vars.StageID.Current == 24;
 			case 10:
 				// The Lich Yard
+				vars.StagesCount++;
 				return settings["LichYardFadeOut"] && vars.StageID.Current == 24;
 			case 11:
 				// The Explodatorium
+				vars.StagesCount++;
 				return settings["ExplodatoriumFadeOut"] && vars.StageID.Current == 24;
 			case 12:
 				// Iron Whale
+				vars.StagesCount++;
 				return settings["IronWhaleFadeOut"] && vars.StageID.Current == 24;
 			case 13:
 				// Lost City
+				vars.StagesCount++;
 				return settings["LostCityFadeOut"] && vars.StageID.Current == 24;
 			case 14:
 				// Clock Tower
+				vars.StagesCount++;
 				return settings["ClockTowerFadeOut"] && vars.StageID.Current == 24;
 			case 15:
 				// Stranded Ship
+				vars.StagesCount++;
 				return settings["StrandedShipFadeOut"] && vars.StageID.Current == 24;
 			case 16:
 				// Flying Machine
+				vars.StagesCount++;
 				return settings["FlyingMachineFadeOut"] && vars.StageID.Current == 24;
 			case 17:
 				// Tower of Fate: Entrance
 				if (!vars.ToFEntranceFadeOut) {
+					vars.StagesCount = 0;
 					vars.ToFEntranceFadeOut = true;
 					return settings["ToFEntranceFadeOut"] && vars.StageID.Current == 126;
 				}
@@ -917,4 +935,17 @@ split
 		}
 	}
 
+	// Dream Splits
+	if (vars.StageID.Current == 126 && vars.StageID.Old == 24 && vars.StagesCount % 3 == 0) {
+		switch ((byte)vars.StagesCount) {
+			case 3:
+				return settings["Dream1"];
+			case 6:
+				return settings["Dream2"];
+			case 9:
+				return settings["Dream3"];
+			default:
+				break;
+		}
+	}
 }
