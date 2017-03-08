@@ -670,11 +670,11 @@ split
 			}
 			break;
 		case 9:
-			if (!vars.PridemoorBossRoom && 
+			if (!vars.PridemoorKeepBossRoom && 
 					(vars.PlayerPosX.Current >= 757.7 && vars.PlayerPosX.Current <= 800) &&
 					(vars.PlayerPosY.Current >= -200 && vars.PlayerPosY.Current <= -188)) {
-				vars.PridemoorBossRoom = true;
-				return settings["PridemoorBossRoom"];
+				vars.PridemoorKeepBossRoom = true;
+				return settings["PridemoorKeepBossRoom"];
 			}
 			break;
 		case 10:
