@@ -454,6 +454,8 @@ init
 
 update
 {
+
+	vars.watchers.UpdateAll(game);
 	// Note: "ShovelKnight.exe"+0x0 isn't a null area of memory 
 	// Rescan Static logic start (This shouldn't have to be used more than once!)
 	if ((IntPtr)vars.PlayerGoldAddr == IntPtr.Zero && !vars.RescanStaticStopwatch.IsRunning) {
@@ -538,7 +540,7 @@ update
 		vars.ToFEnchantress1Kill = false;
 	}
 
-	vars.watchers.UpdateAll(game);
+	
 }
 
 start
