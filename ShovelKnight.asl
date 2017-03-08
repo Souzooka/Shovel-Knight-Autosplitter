@@ -104,7 +104,7 @@ startup
 	settings.Add("SplitsBossRoom", false, "Stage Splits (on entering boss room)", "Splits");
 	settings.Add("SplitsGold", true, "Boss Splits (on gold)", "Splits");
 	settings.Add("SplitsKill", true, "Boss Splits (on kill)", "Splits");
-	settings.Add("SplitsFadeOut", false, "Boss Splits (on fadeout) (not implemented)", "Splits");
+	settings.Add("SplitsFadeOut", false, "Boss Splits (on fadeout)", "Splits");
 
 	// On Stage Splits
 	settings.Add("PlainsStage", true, "The Plains", "SplitsStage");
@@ -246,6 +246,9 @@ init
 	vars.ToFBossRushBossRoom = false;
 	vars.ToFEnchantressBossRoom = false;
 	vars.ToFEnchantress1Kill = false;
+	vars.ToFEntranceFadeOut = false;
+	vars.ToFBossRushFadeOut = false;
+	vars.BlackKnight2FadeOut = false;
 
 	// REMINDER: The base address is always the same in each instance of the same version. You only need to scan for it in init when the game is loaded, and never again!
 	// REMINDER: The only things which may need readjusting are the pointer values.
@@ -534,6 +537,9 @@ update
 		vars.ToFBossRushBossRoom = false;
 		vars.ToFEnchantressBossRoom = false;
 		vars.ToFEnchantress1Kill = false;
+		vars.ToFEntranceFadeOut = false;
+		vars.ToFBossRushFadeOut = false;
+		vars.BlackKnight2FadeOut = false;
 	}
 
 	
@@ -887,13 +893,25 @@ split
 				return settings["FlyingMachineFadeOut"] && vars.StageID.Current == 24;
 			case 17:
 				// Tower of Fate: Entrance
-				return settings["ToFEntranceFadeOut"] && vars.StageID.Current == 126;
+				if (!vars.ToFEntranceFadeOut) {
+					vars.ToFEntranceFadeOut = true;
+					return settings["ToFEntranceFadeOut"] && vars.StageID.Current == 126;
+				}
+				break;
 			case 18:
 				// Tower of Fate: Ascent
-				return settings["ToFBossRushFadeOut"] && vars.StageID.Current == 126;
+				if (!vars.ToFBossRushFadeOut) {
+					vars.ToFBossRushFadeOut = true;
+					return settings["ToFBossRushFadeOut"] && vars.StageID.Current == 126;
+				}
+				break;
 			case 38:
 				// Black Knight 2
-				return settings["BlackKnight2FadeOut"] && vars.StageID.Current == 126;
+				if (!vars.BlackKnight2FadeOut) {
+					vars.BlackKnight2FadeOut = true;
+					return settings["BlackKnight2FadeOut"] && vars.StageID.Current == 126;
+				}
+				break;
 			default:
 				break;
 		}
