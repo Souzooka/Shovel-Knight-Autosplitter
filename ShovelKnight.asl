@@ -256,6 +256,9 @@ init
 	vars.ToFBossRushFadeOut = false;
 	vars.BlackKnight2FadeOut = false;
 	vars.StagesCount = 0;
+	vars.Dream1 = false;
+	vars.Dream2 = false;
+	vars.Dream3 = false;
 
 	// REMINDER: The base address is always the same in each instance of the same version. You only need to scan for it in init when the game is loaded, and never again!
 	// REMINDER: The only things which may need readjusting are the pointer values.
@@ -548,6 +551,9 @@ update
 		vars.ToFBossRushFadeOut = false;
 		vars.BlackKnight2FadeOut = false;
 		vars.StagesCount = 0;
+		vars.Dream1 = false;
+		vars.Dream2 = false;
+		vars.Dream3 = false;
 	}
 
 	
@@ -935,15 +941,28 @@ split
 		}
 	}
 
+
 	// Dream Splits
-	if (vars.StageID.Current == 126 && vars.StageID.Old == 24 && vars.StagesCount % 3 == 0) {
+	if (vars.StageID.Current == 126 && vars.StagesCount % 3 == 0) {
 		switch ((byte)vars.StagesCount) {
 			case 3:
-				return settings["Dream1"];
+				if (!vars.Dream1) {
+					vars.Dream1 = true;
+					return settings["Dream1"];
+				}
+				break;
 			case 6:
-				return settings["Dream2"];
+				if (!vars.Dream2) {
+					vars.Dream2 = true;
+					return settings["Dream2"];
+				}
+				break;
 			case 9:
-				return settings["Dream3"];
+				if (!vars.Dream3) {
+					vars.Dream3 = true;
+					return settings["Dream3"];
+				}
+				break;
 			default:
 				break;
 		}
