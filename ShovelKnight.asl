@@ -244,6 +244,7 @@ init
 	vars.FlyingMachineBossRoom = false;
 	vars.ToFEntranceBossRoom = false;
 	vars.ToFBossRushBossRoom = false;
+	vars.ToFEnchantressBossRoom = false;
 	vars.ToFEnchantress1Kill = false;
 
 	// REMINDER: The base address is always the same in each instance of the same version. You only need to scan for it in init when the game is loaded, and never again!
@@ -533,6 +534,7 @@ update
 		vars.FlyingMachineBossRoom = false;
 		vars.ToFEntranceBossRoom = false;
 		vars.ToFBossRushBossRoom = false;
+		vars.ToFEnchantressBossRoom = false;
 		vars.ToFEnchantress1Kill = false;
 	}
 
@@ -693,6 +695,54 @@ split
 					(vars.PlayerPosY.Current >= -258 && vars.PlayerPosY.Current <= -240)) {
 				vars.LostCityBossRoom = true;
 				return settings["LostCityBossRoom"];
+			}
+			break;
+		case 14:
+			if (!vars.ClockTowerBossRoom && 
+					(vars.PlayerPosX.Current >= 635.2 && vars.PlayerPosX.Current <= 673) &&
+					(vars.PlayerPosY.Current >= -255 && vars.PlayerPosY.Current <= -220)) {
+				vars.ClockTowerBossRoom = true;
+				return settings["ClockTowerBossRoom"];
+			}
+			break;
+		case 15:
+			if (!vars.StrandedShipBossRoom && 
+					(vars.PlayerPosX.Current >= 902.4 && vars.PlayerPosX.Current <= 942) &&
+					(vars.PlayerPosY.Current >= -100 && vars.PlayerPosY.Current <= -50)) {
+				vars.StrandedShipBossRoom = true;
+				return settings["StrandedShipBossRoom"];
+			}
+			break;
+		case 16:
+			if (!vars.FlyingMachineBossRoom && 
+					(vars.PlayerPosX.Current >= 926.4 && vars.PlayerPosX.Current <= 970) &&
+					(vars.PlayerPosY.Current >= -80 && vars.PlayerPosY.Current <= -30)) {
+				vars.FlyingMachineBossRoom = true;
+				return settings["FlyingMachineBossRoom"];
+			}
+			break;
+		case 17:
+			if (!vars.ToFEntranceBossRoom && 
+					(vars.PlayerPosX.Current >= 1036.8 && vars.PlayerPosX.Current <= 1070) &&
+					(vars.PlayerPosY.Current >= -120 && vars.PlayerPosY.Current <= -30)) {
+				vars.ToFEntranceBossRoom = true;
+				return settings["ToFEntranceBossRoom"];
+			}
+			break;
+		case 18:
+			if (!vars.ToFBossRushBossRoom && 
+					(vars.PlayerPosX.Current >= 663 && vars.PlayerPosX.Current <= 700) &&
+					(vars.PlayerPosY.Current >= -190 && vars.PlayerPosY.Current <= -169.4)) {
+				vars.ToFBossRushBossRoom = true;
+				return settings["ToFBossRushBossRoom"];
+			}
+			break;
+		case 19:
+			if (!vars.ToFEnchantressBossRoom && 
+					(vars.PlayerPosX.Current >= 433.6 && vars.PlayerPosX.Current <= 480) &&
+					(vars.PlayerPosY.Current >= -210 && vars.PlayerPosY.Current <= -169.4)) {
+				vars.ToFEnchantressBossRoom = true;
+				return settings["ToFEnchantressBossRoom"];
 			}
 			break;
 		default:
