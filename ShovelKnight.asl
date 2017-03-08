@@ -910,7 +910,7 @@ split
 				return settings["FlyingMachineFadeOut"] && vars.StageID.Current == 24;
 			case 17:
 				// Tower of Fate: Entrance
-				if (!vars.ToFEntranceFadeOut) {
+				if (!vars.ToFEntranceFadeOut && vars.StageID.Current == 126 && vars.ToFEntranceBossRoom) {
 					vars.StagesCount = 0;
 					vars.ToFEntranceFadeOut = true;
 					return settings["ToFEntranceFadeOut"] && vars.StageID.Current == 126;
@@ -918,7 +918,7 @@ split
 				break;
 			case 18:
 				// Tower of Fate: Ascent
-				if (!vars.ToFBossRushFadeOut) {
+				if (!vars.ToFBossRushFadeOut && vars.StageID.Current == 126 && vars.ToFBossRushBossRoom) {
 					vars.ToFBossRushFadeOut = true;
 					return settings["ToFBossRushFadeOut"] && vars.StageID.Current == 126;
 				}
