@@ -927,7 +927,7 @@ split
 				// Black Knight 2
 				if (!vars.BlackKnight2FadeOut) {
 					vars.BlackKnight2FadeOut = true;
-					return settings["BlackKnight2FadeOut"] && vars.StageID.Current == 126;
+					return settings["BlackKnight2FadeOut"] && vars.StageID.Current == 126 && vars.PlagueKnight.Current;
 				}
 				break;
 			default:
