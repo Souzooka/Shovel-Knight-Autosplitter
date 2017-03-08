@@ -122,6 +122,17 @@ startup
 
 	// On Bossroom Splits
 	settings.Add("PlainsBossRoom", false, "The Plains", "SplitsBossRoom");
+	settings.Add("PridemoorKeepBossRoom", true, "Pridemoor Keep", "SplitsBossRoom");
+	settings.Add("LichYardBossRoom", true, "Lich Yard", "SplitsBossRoom");
+	settings.Add("ExplodatoriumBossRoom", true, "Explodatorium", "SplitsBossRoom");
+	settings.Add("IronWhaleBossRoom", true, "Iron Whale", "SplitsBossRoom");
+	settings.Add("LostCityBossRoom", true, "Lost City", "SplitsBossRoom");
+	settings.Add("ClockTowerBossRoom", true, "Clock Tower", "SplitsBossRoom");
+	settings.Add("StrandedShipBossRoom", true, "Stranded Ship", "SplitsBossRoom");
+	settings.Add("FlyingMachineBossRoom", true, "Flying Machine", "SplitsBossRoom");
+	settings.Add("ToFEntranceBossRoom", true, "Tower of Fate: Entrance", "SplitsBossRoom");
+	settings.Add("ToFBossRushBossRoom", true, "Tower of Fate: Ascent", "SplitsBossRoom");
+	settings.Add("ToFEnchantressBossRoom", true, "Tower of Fate: ????????", "SplitsBossRoom");
 
 	// On Gold Boss Splits
 	settings.Add("PlainsGold", true, "Black Knight 1 (The Plains)", "SplitsGold");
@@ -223,6 +234,16 @@ init
 	vars.ToFBossRushStage = false;
 	vars.ToFEnchantressStage = false;
 	vars.PlainsBossRoom = false;
+	vars.PridemoorKeepBossRoom = false;
+	vars.LichYardBossRoom = false;
+	vars.ExplodatoriumBossRoom = false;
+	vars.IronWhaleBossRoom = false;
+	vars.LostCityBossRoom = false;
+	vars.ClockTowerBossRoom = false;
+	vars.StrandedShipBossRoom = false;
+	vars.FlyingMachineBossRoom = false;
+	vars.ToFEntranceBossRoom = false;
+	vars.ToFBossRushBossRoom = false;
 	vars.ToFEnchantress1Kill = false;
 
 	// REMINDER: The base address is always the same in each instance of the same version. You only need to scan for it in init when the game is loaded, and never again!
@@ -502,6 +523,16 @@ update
 		vars.ToFBossRushStage = false;
 		vars.ToFEnchantressStage = false;
 		vars.PlainsBossRoom = false;
+		vars.PridemoorKeepBossRoom = false;
+		vars.LichYardBossRoom = false;
+		vars.ExplodatoriumBossRoom = false;
+		vars.IronWhaleBossRoom = false;
+		vars.LostCityBossRoom = false;
+		vars.ClockTowerBossRoom = false;
+		vars.StrandedShipBossRoom = false;
+		vars.FlyingMachineBossRoom = false;
+		vars.ToFEntranceBossRoom = false;
+		vars.ToFBossRushBossRoom = false;
 		vars.ToFEnchantress1Kill = false;
 	}
 
@@ -622,6 +653,30 @@ split
 					(vars.PlayerPosY.Current >= -407 && vars.PlayerPosY.Current <= -370)) {
 				vars.PlainsBossRoom = true;
 				return settings["PlainsBossRoom"];
+			}
+			break;
+		case 9:
+			if (!vars.PridemoorBossRoom && 
+					(vars.PlayerPosX.Current >= 757.7 && vars.PlayerPosX.Current <= 800) &&
+					(vars.PlayerPosY.Current >= -200 && vars.PlayerPosY.Current <= -188)) {
+				vars.PridemoorBossRoom = true;
+				return settings["PridemoorBossRoom"];
+			}
+			break;
+		case 10:
+			if (!vars.LichYardBossRoom && 
+					(vars.PlayerPosX.Current >= 931.2 && vars.PlayerPosX.Current <= 970.5) &&
+					(vars.PlayerPosY.Current >= -122 && vars.PlayerPosY.Current <= -100)) {
+				vars.LichYardBossRoom = true;
+				return settings["LichYardBossRoom"];
+			}
+			break;
+		case 11:
+			if (!vars.ExplodatoriumBossRoom && 
+					(vars.PlayerPosX.Current >= 958 && vars.PlayerPosX.Current <= 1000) &&
+					(vars.PlayerPosY.Current >= -230 && vars.PlayerPosY.Current <= -207)) {
+				vars.ExplodatoriumBossRoom = true;
+				return settings["ExplodatoriumBossRoom"];
 			}
 			break;
 		default:
