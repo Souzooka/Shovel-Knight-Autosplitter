@@ -51,6 +51,12 @@
 
 	*/
 
+	/*
+	
+	Known issues: LS can return a "Cannot perform runtime binding on a null reference" error occasionally, and this may cause logic errors.
+
+	*/
+
 
 
 
@@ -175,6 +181,7 @@ startup
 	settings.Add("StrandedShipFadeOut", true, "Stranded Ship", "SplitsFadeOut");
 	settings.Add("FlyingMachineFadeOut", true, "Flying Machine", "SplitsFadeOut");
 	settings.Add("ToFEntranceFadeOut", true, "Tower of Fate: Entrance", "SplitsFadeOut");
+	settings.Add("ToFBossRushFadeOut", true, "Tower of Fate: Ascent", "SplitsFadeOut");
 	settings.Add("BlackKnight2FadeOut", true, "Black Knight 2 (PK Only)", "SplitsFadeOut");
 
 	// Dream Splits
