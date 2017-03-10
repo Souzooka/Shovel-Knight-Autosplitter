@@ -152,7 +152,7 @@ startup
 	settings.Add("strandedShipGold", true, "Polar Knight (Stranded Ship)", "splitsGold");
 	settings.Add("flyingMachineGold", true, "Propeller Knight (Flying Machine)", "splitsGold");
 	settings.Add("toFEntranceGold", true, "Black Knight 3 (Tower of Fate: Entrance)", "splitsGold");
-	settings.Add("BlackKnight2Gold", true, "Black Knight 2 (PK Only)", "splitsGold");
+	settings.Add("blackKnight2Gold", true, "Black Knight 2 (PK Only)", "splitsGold");
 
 	// On Kill Splits
 	settings.Add("plainsKill", false, "Black Knight 1 (The Plains)", "splitsKill");
@@ -165,7 +165,7 @@ startup
 	settings.Add("strandedShipKill", false, "Polar Knight (Stranded Ship)", "splitsKill");
 	settings.Add("flyingMachineKill", false, "Propeller Knight (Flying Machine)", "splitsKill");
 	settings.Add("toFEntranceKill", false, "Black Knight 3 (Tower of Fate: Entrance)", "splitsKill");
-	settings.Add("BlackKnight2Kill", false, "Black Knight 2 (PK Only)", "splitsKill");
+	settings.Add("blackKnight2Kill", false, "Black Knight 2 (PK Only)", "splitsKill");
 	settings.Add("toFBossRushKill", true, "Boss Rush (Tower of Fate: Ascent)", "splitsKill");
 	settings.Add("toFEnchantress1Kill", true, "Enchantress 1 (Tower of Fate: ????????)", "splitsKill");
 	settings.Add("toFEnchantress2Kill", true, "Enchantress 2 (Tower of Fate: ????????)", "splitsKill");
@@ -182,7 +182,7 @@ startup
 	settings.Add("flyingMachineFadeOut", true, "Flying Machine", "splitsFadeOut");
 	settings.Add("toFEntranceFadeOut", true, "Tower of Fate: Entrance", "splitsFadeOut");
 	settings.Add("toFBossRushFadeOut", true, "Tower of Fate: Ascent", "splitsFadeOut");
-	settings.Add("BlackKnight2FadeOut", true, "Black Knight 2 (PK Only)", "splitsFadeOut");
+	settings.Add("blackKnight2FadeOut", true, "Black Knight 2 (PK Only)", "splitsFadeOut");
 
 	// Dream Splits
 	settings.Add("dream1", true, "Dream 1", "splitsDreams");
@@ -821,7 +821,7 @@ split
 				return settings["toFEntranceGold"];
 			case 38:
 				// Black Knight 2
-				return settings["BlackKnight2Gold"] && vars.plagueKnight.Current;
+				return settings["blackKnight2Gold"] && vars.plagueKnight.Current;
 			default:
 				return false;
 		}
@@ -881,7 +881,7 @@ split
 				break;
 			case 38:
 				// Black Knight 2
-				return settings["BlackKnight2Kill"] && vars.plagueKnight.Current;
+				return settings["blackKnight2Kill"] && vars.plagueKnight.Current;
 			default:
 				return false;
 		}
@@ -945,7 +945,7 @@ split
 				// Black Knight 2
 				if (!vars.blackKnight2FadeOut) {
 					vars.blackKnight2FadeOut = true;
-					return settings["BlackKnight2FadeOut"] && vars.stageID.Current == 126 && vars.plagueKnight.Current;
+					return settings["blackKnight2FadeOut"] && vars.stageID.Current == 126 && vars.plagueKnight.Current;
 				}
 				break;
 			default:
