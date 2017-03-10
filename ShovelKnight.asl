@@ -206,6 +206,7 @@ init
 	vars.versionFound = false;
 	vars.version = "";
 	vars.versionNumber = 2.4;
+	vars.specterOfTorment = false;
 
 	vars.rescanStaticStopwatch = new Stopwatch();
 	vars.rescanHPDisplayStopwatch = new Stopwatch();
@@ -225,6 +226,8 @@ init
 
 	vars.hpPlayerDisplayCodeAddr = IntPtr.Zero;
 	vars.versionCodeAddr = IntPtr.Zero;
+	vars.saveSlotCodeAddr = IntPtr.Zero;
+	vars.saveSlotSpecterCodeAddr = IntPtr.Zero;
 
 	vars.plagueKnightAddr = IntPtr.Zero;
 	vars.playerGoldAddr = IntPtr.Zero;
@@ -371,6 +374,11 @@ init
 
 		vars.saveSlotCodeAddr = scanner.Scan(vars.saveSlotTarget);
 		vars.saveSlotSpecterCodeAddr = scanner.Scan(vars.saveSlotSpecterTarget);
+
+		if (vars.saveSlotCodeAddr == IntPtr.Zero && vars.saveSlotSpecterCodeAddr != IntPtr.Zero) {
+			vars.specterOfTorment = true;
+			vars.saveSlotCodeAddr = vars.saveSlotSpecterCodeAddr;
+		}
 
 		vars.saveSlotAddr = memory.ReadValue<int>((IntPtr)vars.saveSlotCodeAddr);
 		vars.saveSlot = new MemoryWatcher<byte>((IntPtr)vars.saveSlotAddr);
@@ -576,13 +584,23 @@ update
 start
 {
 	// Start when a save slot is selected
-	return vars.saveSlot.Current < 9 && vars.saveSlot.Old == 9;
+	if (!vars.specterOfTorment) {
+		return vars.saveSlot.Current < 9 && vars.saveSlot.Old == 9;
+	}
+	else if (vars.specterOfTorment) {
+		return vars.saveSlot.Current < 10 && vars.saveSlot.Old == 10;
+	}
 }
 
 reset
 {
 	// Reset when save slot is deselected (which happens when going to title)
-	return vars.saveSlot.Current == 9 && vars.saveSlot.Old != 9;
+	if (!vars.specterOfTorment) {
+		return vars.saveSlot.Current == 9 && vars.saveSlot.Old != 9;
+	}
+	else if (vars.specterOfTorment) {
+		return vars.saveSlot.Current == 10 && vars.saveSlot.Old != 10;
+	}
 }
 
 split
