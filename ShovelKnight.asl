@@ -292,26 +292,6 @@ init
 		"A3 ?? ?? ?? ??", 		// Target Address
 		"5F");
 
-
-	// variables seem to change pointer paths between updates, so be a crazy person and scan for every single offset
-	// for 2.4A: 0x490B10, 0x360, 0x14, 0xCB4
-	vars.playerGoldLastOffsetTarget = new SigScanTarget(2,
-		"89 8B ?? ?? ?? ??",
-		"EB 06",
-		"89 93 ?? ?? ?? ??",
-		"8B 83 ?? ?? ?? ??",
-		"3D ?? ?? ?? ??",
-		"72 05");
-
-	// 0x10?
-	vars.playerGold2ndLastOffsetTarget = new SigScanTarget(2,
-		"8B 77 ??",
-		"89 3D ?? ?? ?? ??",
-		"85 F6",
-		"74 11",
-		"8B 4E 04",
-		"FF D2");
-
 	// StageID offsets: Static
 	vars.stageIDTarget = new SigScanTarget(1,
 		"A3 ?? ?? ?? ??",
