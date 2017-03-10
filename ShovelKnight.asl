@@ -61,10 +61,10 @@
 
 
 	/* List of stage IDs:
-	8: The plains (Black Knight) (✓)
+	8: The Plains (Black Knight) (✓)
 	9: Pridemoor Keep (King Knight) (✓)
 	10: The Lich Yard (Specter Knight) (✓)
-	11: The explodatorium (Plague Knight) (✓)
+	11: The Explodatorium (Plague Knight) (✓)
 	12: Iron Whale (Treasure Knight) (✓)
 	13: Lost City (Mole Knight) (✓)
 	14: Clockwork Tower (Tinker Knight) (✓)
@@ -114,10 +114,10 @@ startup
 	settings.Add("splitsDreams", false, "Dream Splits", "splits");
 
 	// On Stage Splits
-	settings.Add("plainsStage", true, "The plains", "splitsStage");
+	settings.Add("plainsStage", true, "The Plains", "splitsStage");
 	settings.Add("pridemoorKeepStage", true, "Pridemoor Keep", "splitsStage");
 	settings.Add("lichYardStage", true, "Lich Yard", "splitsStage");
-	settings.Add("explodatoriumStage", true, "explodatorium", "splitsStage");
+	settings.Add("explodatoriumStage", true, "Explodatorium", "splitsStage");
 	settings.Add("ironWhaleStage", true, "Iron Whale", "splitsStage");
 	settings.Add("lostCityStage", true, "Lost City", "splitsStage");
 	settings.Add("clockTowerStage", true, "Clock Tower", "splitsStage");
@@ -128,10 +128,10 @@ startup
 	settings.Add("toFEnchantressStage", true, "Tower of Fate: ????????", "splitsStage");
 
 	// On Bossroom Splits
-	settings.Add("plainsBossRoom", false, "The plains", "splitsBossRoom");
+	settings.Add("plainsBossRoom", false, "The Plains", "splitsBossRoom");
 	settings.Add("pridemoorKeepBossRoom", true, "Pridemoor Keep", "splitsBossRoom");
 	settings.Add("lichYardBossRoom", true, "Lich Yard", "splitsBossRoom");
-	settings.Add("explodatoriumBossRoom", true, "explodatorium", "splitsBossRoom");
+	settings.Add("explodatoriumBossRoom", true, "Explodatorium", "splitsBossRoom");
 	settings.Add("ironWhaleBossRoom", true, "Iron Whale", "splitsBossRoom");
 	settings.Add("lostCityBossRoom", true, "Lost City", "splitsBossRoom");
 	settings.Add("clockTowerBossRoom", true, "Clock Tower", "splitsBossRoom");
@@ -142,10 +142,10 @@ startup
 	settings.Add("toFEnchantressBossRoom", true, "Tower of Fate: ????????", "splitsBossRoom");
 
 	// On Gold Boss Splits
-	settings.Add("plainsGold", true, "Black Knight 1 (The plains)", "splitsGold");
+	settings.Add("plainsGold", true, "Black Knight 1 (The Plains)", "splitsGold");
 	settings.Add("pridemoorKeepGold", true, "King Knight (Pridemoor Keep)", "splitsGold");
 	settings.Add("lichYardGold", true, "Specter Knight (Lich Yard)", "splitsGold");
-	settings.Add("explodatoriumGold", true, "Plague Knight (explodatorium)", "splitsGold");
+	settings.Add("explodatoriumGold", true, "Plague Knight (Explodatorium)", "splitsGold");
 	settings.Add("ironWhaleGold", true, "Treasure Knight (Iron Whale)", "splitsGold");
 	settings.Add("lostCityGold", true, "Mole Knight (Lost City)", "splitsGold");
 	settings.Add("clockTowerGold", true, "Tinker Knight (Clock Tower)", "splitsGold");
@@ -155,10 +155,10 @@ startup
 	settings.Add("BlackKnight2Gold", true, "Black Knight 2 (PK Only)", "splitsGold");
 
 	// On Kill Splits
-	settings.Add("plainsKill", false, "Black Knight 1 (The plains)", "splitsKill");
+	settings.Add("plainsKill", false, "Black Knight 1 (The Plains)", "splitsKill");
 	settings.Add("pridemoorKeepKill", false, "King Knight (Pridemoor Keep)", "splitsKill");
 	settings.Add("lichYardKill", false, "Specter Knight (Lich Yard)", "splitsKill");
-	settings.Add("explodatoriumKill", false, "Plague Knight (explodatorium)", "splitsKill");
+	settings.Add("explodatoriumKill", false, "Plague Knight (Explodatorium)", "splitsKill");
 	settings.Add("ironWhaleKill", false, "Treasure Knight (Iron Whale)", "splitsKill");
 	settings.Add("lostCityKill", false, "Mole Knight (Lost City)", "splitsKill");
 	settings.Add("clockTowerKill", false, "Tinker Knight (Clock Tower)", "splitsKill");
@@ -171,10 +171,10 @@ startup
 	settings.Add("toFEnchantress2Kill", true, "Enchantress 2 (Tower of Fate: ????????)", "splitsKill");
 
 	// On Fade Out Boss Splits
-	settings.Add("plainsFadeOut", true, "The plains", "splitsFadeOut");
+	settings.Add("plainsFadeOut", true, "The Plains", "splitsFadeOut");
 	settings.Add("pridemoorKeepFadeOut", true, "Pridemoor Keep", "splitsFadeOut");
 	settings.Add("lichYardFadeOut", true, "Lich Yard", "splitsFadeOut");
-	settings.Add("explodatoriumFadeOut", true, "explodatorium", "splitsFadeOut");
+	settings.Add("explodatoriumFadeOut", true, "Explodatorium", "splitsFadeOut");
 	settings.Add("ironWhaleFadeOut", true, "Iron Whale", "splitsFadeOut");
 	settings.Add("lostCityFadeOut", true, "Lost City", "splitsFadeOut");
 	settings.Add("clockTowerFadeOut", true, "Clock Tower", "splitsFadeOut");
@@ -321,7 +321,7 @@ init
 		"C6 05 ?? ?? ?? ?? 09"	// Target Address
 		);
 
-	// Tentative
+	// Tentative, saveSlot might be 10 when in title for Specter
 	vars.saveSlotSpecterTarget = new SigScanTarget(2,
 		"C6 05 ?? ?? ?? ?? 0A"	// Target Address
 		);
@@ -591,7 +591,7 @@ split
 	if (vars.hpBossDisplay.Old == 0 && vars.hpBossDisplay.Current > 0 && !vars.recentlyDeadStopwatch.IsRunning) {
 		switch((byte)vars.stageID.Current) {
 			case 8:
-				// The plains
+				// The Plains
 				if (!vars.plainsStage && vars.hpBossDisplay.Current != 8) {
 					vars.plainsStage = true;
 					return settings["plainsStage"];
@@ -612,7 +612,7 @@ split
 				}
 				break;
 			case 11:
-				// The explodatorium
+				// The Explodatorium
 				if (!vars.explodatoriumStage) {
 					vars.explodatoriumStage = true;
 					return settings["explodatoriumStage"];
@@ -786,7 +786,7 @@ split
 	if (vars.bossRecentlyDefeated && vars.playerGold.Current > vars.playerGold.Old) {
 		switch((byte)vars.stageID.Current) {
 			case 8:
-				// The plains
+				// The Plains
 				return settings["plainsGold"];
 			case 9:
 				// Pridemoor Keep
@@ -795,7 +795,7 @@ split
 				// The Lich Yard
 				return settings["lichYardGold"];
 			case 11:
-				// The explodatorium
+				// The Explodatorium
 				return settings["explodatoriumGold"];
 			case 12:
 				// Iron Whale
@@ -833,7 +833,7 @@ split
 	if (vars.hpBossDisplay.Current == 0 && vars.hpBossDisplay.Old != 0 && vars.hpPlayerDisplay.Current > 0) {
 		switch((byte)vars.stageID.Current) {
 			case 8:
-				// The plains
+				// The Plains
 				return settings["plainsKill"];
 			case 9:
 				// Pridemoor Keep
@@ -842,7 +842,7 @@ split
 				// The Lich Yard
 				return settings["lichYardKill"];
 			case 11:
-				// The explodatorium
+				// The Explodatorium
 				return settings["explodatoriumKill"];
 			case 12:
 				// Iron Whale
@@ -893,7 +893,7 @@ split
 	if (vars.stageID.Current == 24 || vars.stageID.Current == 126 && vars.stageID.Old != 24) {
 		switch ((byte)vars.stageID.Old) {
 			case 8:
-				// The plains
+				// The Plains
 				vars.stagesCount++;
 				return settings["plainsFadeOut"] && vars.stageID.Current == 24;
 			case 9:
@@ -905,7 +905,7 @@ split
 				vars.stagesCount++;
 				return settings["lichYardFadeOut"] && vars.stageID.Current == 24;
 			case 11:
-				// The explodatorium
+				// The Explodatorium
 				vars.stagesCount++;
 				return settings["explodatoriumFadeOut"] && vars.stageID.Current == 24;
 			case 12:
