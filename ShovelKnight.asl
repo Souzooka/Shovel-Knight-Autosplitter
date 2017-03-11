@@ -457,9 +457,6 @@ init
 	vars.RescanHPDisplay = RescanHPDisplay;
 	vars.RescanVersion = RescanVersion;
 
-	vars.testAddr = scanner.Scan(vars.playerGoldLastOffsetTarget);
-	vars.test = memory.ReadValue<int>((IntPtr)vars.testAddr); 
-
 	// SCANNING ACTIONS END
 }
 
