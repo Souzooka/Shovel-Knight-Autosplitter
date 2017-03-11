@@ -169,6 +169,7 @@ startup
 	settings.Add("toFBossRushKill", true, "Boss Rush (Tower of Fate: Ascent)", "splitsKill");
 	settings.Add("toFEnchantress1Kill", true, "Enchantress 1 (Tower of Fate: ????????)", "splitsKill");
 	settings.Add("toFEnchantress2Kill", true, "Enchantress 2 (Tower of Fate: ????????)", "splitsKill");
+	settings.Add("toFEnchantress3Kill", true, "Enchantress 3 (Tower of Fate: ????????) (PK Only)", "splitsKill");
 
 	// On Fade Out Boss Splits
 	settings.Add("plainsFadeOut", true, "The Plains", "splitsFadeOut");
@@ -262,6 +263,7 @@ init
 	vars.toFBossRushBossRoom = false;
 	vars.toFEnchantressBossRoom = false;
 	vars.toFEnchantress1Kill = false;
+	vars.toFEnchantress2Kill = false;
 	vars.toFEntranceFadeOut = false;
 	vars.toFBossRushFadeOut = false;
 	vars.blackKnight2FadeOut = false;
@@ -546,6 +548,7 @@ update
 		vars.toFBossRushBossRoom = false;
 		vars.toFEnchantressBossRoom = false;
 		vars.toFEnchantress1Kill = false;
+		vars.toFEnchantress2Kill = false;
 		vars.toFEntranceFadeOut = false;
 		vars.toFBossRushFadeOut = false;
 		vars.blackKnight2FadeOut = false;
@@ -860,8 +863,12 @@ split
 					vars.toFEnchantress1Kill = true;
 					return settings["toFEnchantress1Kill"];
 				}
-				else if (vars.bossKillCounter == 2) {
+				else if (!vars.toFEnchantress2Kill && vars.bossKillCounter == 2) {
+					vars.toFEnchantress2Kill = true;
 					return settings["toFEnchantress2Kill"];
+				}
+				else if (vars.bossKillCounter == 3) {
+					return settings["toFEnchantress3Kill"];
 				}
 				break;
 			case 38:
