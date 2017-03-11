@@ -800,13 +800,7 @@ split
 				return settings["lostCityGold"];
 			case 14:
 				// Clock Tower
-				if (vars.plagueKnight.Current) {
-					return settings["clockTowerGold"] && vars.bossKillCounter == 3;
-				}
-				else if (!vars.plagueKnight.Current) {
-					return settings["clockTowerGold"] && vars.bossKillCounter == 2;
-				}
-				break;
+				return settings["clockTowerGold"] && vars.bossKillCounter == 2;
 			case 15:
 				// Stranded Ship
 				return settings["strandedShipGold"];
@@ -847,13 +841,7 @@ split
 				return settings["lostCityKill"];
 			case 14:
 				// Clock Tower
-				if (vars.plagueKnight.Current) {
-					return settings["clockTowerKill"] && vars.bossKillCounter == 3;
-				}
-				else if (!vars.plagueKnight.Current) {
-					return settings["clockTowerKill"] && vars.bossKillCounter == 2;
-				}
-				break;
+				return settings["clockTowerKill"] && vars.bossKillCounter == 2;
 			case 15:
 				// Stranded Ship
 				return settings["strandedShipKill"];
