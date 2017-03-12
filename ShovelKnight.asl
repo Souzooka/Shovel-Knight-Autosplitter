@@ -332,12 +332,12 @@ init
 
 	// SaveSlot offsets: Static
 	vars.saveSlotTarget = new SigScanTarget(2,
-		"C6 05 ?? ?? ?? ?? 14"	// Target Address
+		"C6 05 ?? ?? ?? ?? 09"	// Target Address
 		);
 
 	// Tentative, saveSlot might be 10 when in title for Specter
 	vars.saveSlotSpecterTarget = new SigScanTarget(2,
-		"C6 05 ?? ?? ?? ?? 0A"	// Target Address
+		"C6 05 ?? ?? ?? ?? 14"	// Target Address
 		);
 
 	// Version String offsets: 0x14, 0x34, 0x60
