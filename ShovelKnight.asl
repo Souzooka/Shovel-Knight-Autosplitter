@@ -123,9 +123,9 @@ startup
 	settings.Add("clockTowerStage", true, "Clock Tower", "splitsStage");
 	settings.Add("strandedShipStage", true, "Stranded Ship", "splitsStage");
 	settings.Add("flyingMachineStage", true, "Flying Machine", "splitsStage");
-	settings.Add("toFEntranceStage", true, "Tower of Fate: Entrance", "splitsStage");
-	settings.Add("toFBossRushStage", true, "Tower of Fate: Ascent", "splitsStage");
-	settings.Add("toFEnchantressStage", true, "Tower of Fate: ????????", "splitsStage");
+	settings.Add("tofEntranceStage", true, "Tower of Fate: Entrance", "splitsStage");
+	settings.Add("tofBossRushStage", true, "Tower of Fate: Ascent", "splitsStage");
+	settings.Add("tofEnchantressStage", true, "Tower of Fate: ????????", "splitsStage");
 
 	// On Bossroom Splits
 	settings.Add("plainsBossRoom", false, "The Plains", "splitsBossRoom");
@@ -137,9 +137,9 @@ startup
 	settings.Add("clockTowerBossRoom", true, "Clock Tower", "splitsBossRoom");
 	settings.Add("strandedShipBossRoom", true, "Stranded Ship", "splitsBossRoom");
 	settings.Add("flyingMachineBossRoom", true, "Flying Machine", "splitsBossRoom");
-	settings.Add("toFEntranceBossRoom", true, "Tower of Fate: Entrance", "splitsBossRoom");
-	settings.Add("toFBossRushBossRoom", true, "Tower of Fate: Ascent", "splitsBossRoom");
-	settings.Add("toFEnchantressBossRoom", true, "Tower of Fate: ????????", "splitsBossRoom");
+	settings.Add("tofEntranceBossRoom", true, "Tower of Fate: Entrance", "splitsBossRoom");
+	settings.Add("tofBossRushBossRoom", true, "Tower of Fate: Ascent", "splitsBossRoom");
+	settings.Add("tofEnchantressBossRoom", true, "Tower of Fate: ????????", "splitsBossRoom");
 
 	// On Gold Boss Splits
 	settings.Add("plainsGold", true, "Black Knight 1 (The Plains)", "splitsGold");
@@ -151,7 +151,7 @@ startup
 	settings.Add("clockTowerGold", true, "Tinker Knight (Clock Tower)", "splitsGold");
 	settings.Add("strandedShipGold", true, "Polar Knight (Stranded Ship)", "splitsGold");
 	settings.Add("flyingMachineGold", true, "Propeller Knight (Flying Machine)", "splitsGold");
-	settings.Add("toFEntranceGold", true, "Black Knight 3 (Tower of Fate: Entrance)", "splitsGold");
+	settings.Add("tofEntranceGold", true, "Black Knight 3 (Tower of Fate: Entrance)", "splitsGold");
 	settings.Add("blackKnight2Gold", true, "Black Knight 2 (PK Only)", "splitsGold");
 
 	// On Kill Splits
@@ -164,12 +164,12 @@ startup
 	settings.Add("clockTowerKill", false, "Tinker Knight (Clock Tower)", "splitsKill");
 	settings.Add("strandedShipKill", false, "Polar Knight (Stranded Ship)", "splitsKill");
 	settings.Add("flyingMachineKill", false, "Propeller Knight (Flying Machine)", "splitsKill");
-	settings.Add("toFEntranceKill", false, "Black Knight 3 (Tower of Fate: Entrance)", "splitsKill");
+	settings.Add("tofEntranceKill", false, "Black Knight 3 (Tower of Fate: Entrance)", "splitsKill");
 	settings.Add("blackKnight2Kill", false, "Black Knight 2 (PK Only)", "splitsKill");
-	settings.Add("toFBossRushKill", true, "Boss Rush (Tower of Fate: Ascent)", "splitsKill");
-	settings.Add("toFEnchantress1Kill", true, "Enchantress 1 (Tower of Fate: ????????)", "splitsKill");
-	settings.Add("toFEnchantress2Kill", true, "Enchantress 2 (Tower of Fate: ????????)", "splitsKill");
-	settings.Add("toFEnchantress3Kill", true, "Enchantress 3 (Tower of Fate: ????????) (PK Only)", "splitsKill");
+	settings.Add("tofBossRushKill", true, "Boss Rush (Tower of Fate: Ascent)", "splitsKill");
+	settings.Add("tofEnchantress1Kill", true, "Enchantress 1 (Tower of Fate: ????????)", "splitsKill");
+	settings.Add("tofEnchantress2Kill", true, "Enchantress 2 (Tower of Fate: ????????)", "splitsKill");
+	settings.Add("tofEnchantress3Kill", true, "Enchantress 3 (Tower of Fate: ????????) (PK Only)", "splitsKill");
 
 	// On Fade Out Boss Splits
 	settings.Add("plainsFadeOut", true, "The Plains", "splitsFadeOut");
@@ -181,8 +181,8 @@ startup
 	settings.Add("clockTowerFadeOut", true, "Clock Tower", "splitsFadeOut");
 	settings.Add("strandedShipFadeOut", true, "Stranded Ship", "splitsFadeOut");
 	settings.Add("flyingMachineFadeOut", true, "Flying Machine", "splitsFadeOut");
-	settings.Add("toFEntranceFadeOut", true, "Tower of Fate: Entrance", "splitsFadeOut");
-	settings.Add("toFBossRushFadeOut", true, "Tower of Fate: Ascent", "splitsFadeOut");
+	settings.Add("tofEntranceFadeOut", true, "Tower of Fate: Entrance", "splitsFadeOut");
+	settings.Add("tofBossRushFadeOut", true, "Tower of Fate: Ascent", "splitsFadeOut");
 	settings.Add("blackKnight2FadeOut", true, "Black Knight 2 (PK Only)", "splitsFadeOut");
 
 	// Dream Splits
@@ -247,9 +247,9 @@ init
 	vars.clockTowerStage = false;
 	vars.strandedShipStage = false;
 	vars.flyingMachineStage = false;
-	vars.toFEntranceStage = false;
-	vars.toFBossRushStage = false;
-	vars.toFEnchantressStage = false;
+	vars.tofEntranceStage = false;
+	vars.tofBossRushStage = false;
+	vars.tofEnchantressStage = false;
 	vars.plainsBossRoom = false;
 	vars.pridemoorKeepBossRoom = false;
 	vars.lichYardBossRoom = false;
@@ -259,18 +259,47 @@ init
 	vars.clockTowerBossRoom = false;
 	vars.strandedShipBossRoom = false;
 	vars.flyingMachineBossRoom = false;
-	vars.toFEntranceBossRoom = false;
-	vars.toFBossRushBossRoom = false;
-	vars.toFEnchantressBossRoom = false;
-	vars.toFEnchantress1Kill = false;
-	vars.toFEnchantress2Kill = false;
-	vars.toFEntranceFadeOut = false;
-	vars.toFBossRushFadeOut = false;
+	vars.tofEntranceBossRoom = false;
+	vars.tofBossRushBossRoom = false;
+	vars.tofEnchantressBossRoom = false;
+	vars.tofEnchantress1Kill = false;
+	vars.tofEnchantress2Kill = false;
+	vars.tofEntranceFadeOut = false;
+	vars.tofBossRushFadeOut = false;
 	vars.blackKnight2FadeOut = false;
 	vars.stagesCount = 0;
 	vars.dream1 = false;
 	vars.dream2 = false;
 	vars.dream3 = false;
+
+	// bossroom coordinate ranges
+	// min, max
+	dynamic bossRoomBounds = new ExpandoObject();
+	vars.bossRoomBounds = bossRoomBounds;
+	bossRoomBounds.PlainsX = new float[2]         {718f,    750f};
+	bossRoomBounds.PlainsY = new float[2]         {-407f,  -370f};
+	bossRoomBounds.PridemoorKeepX = new float[2]  {757.7f,  800f};
+	bossRoomBounds.PridemoorKeepY = new float[2]  {-200f,  -188f};
+	bossRoomBounds.LichYardX = new float[2]       {931.2f,  970.5f};
+	bossRoomBounds.LichYardY = new float[2]       {-122f,  -100f};
+	bossRoomBounds.ExplodatoriumX = new float[2]  {958f,    1000f};
+	bossRoomBounds.ExplodatoriumY = new float[2]  {-230f,  -207f};
+	bossRoomBounds.IronWhaleX = new float[2]      {836.7f,  875f};
+	bossRoomBounds.IronWhaleY = new float[2]      {-213f,  -195f};
+	bossRoomBounds.LostCityX = new float[2]       {878.4f,  916f};
+	bossRoomBounds.LostCityY = new float[2]       {-258f,  -240f};
+	bossRoomBounds.ClockTowerX = new float[2]     {635.2f,  673f};
+	bossRoomBounds.ClockTowerY = new float[2]     {-255f,  -220f};
+	bossRoomBounds.StrandedShipX = new float[2]   {902.4f,  942f};
+	bossRoomBounds.StrandedShipY = new float[2]   {-100f,  -60f};
+	bossRoomBounds.FlyingMachineX = new float[2]  {926.4f,  970f};
+	bossRoomBounds.FlyingMachineY = new float[2]  {-80f,   -30f};
+	bossRoomBounds.ToFEntranceX = new float[2]    {1036.8f, 1070f};
+	bossRoomBounds.ToFEntranceY = new float[2]    {-120f,  -30f};
+	bossRoomBounds.ToFBossRushX = new float[2]    {663f,    700f};
+	bossRoomBounds.ToFBossRushY = new float[2]    {-190f,  -169.4f};
+	bossRoomBounds.ToFEnchantressX = new float[2] {-433.6f, 480f};
+	bossRoomBounds.ToFEnchantressY = new float[2] {-210f,  -169.4f};
 
 	// REMINDER: The base address is always the same in each instance of the same version. You only need to scan for it in init when the game is loaded, and never again!
 	// REMINDER: The only things which may need readjusting are the pointer values.
@@ -532,9 +561,9 @@ update
 		vars.clockTowerStage = false;
 		vars.strandedShipStage = false;
 		vars.flyingMachineStage = false;
-		vars.toFEntranceStage = false;
-		vars.toFBossRushStage = false;
-		vars.toFEnchantressStage = false;
+		vars.tofEntranceStage = false;
+		vars.tofBossRushStage = false;
+		vars.tofEnchantressStage = false;
 		vars.plainsBossRoom = false;
 		vars.pridemoorKeepBossRoom = false;
 		vars.lichYardBossRoom = false;
@@ -544,13 +573,13 @@ update
 		vars.clockTowerBossRoom = false;
 		vars.strandedShipBossRoom = false;
 		vars.flyingMachineBossRoom = false;
-		vars.toFEntranceBossRoom = false;
-		vars.toFBossRushBossRoom = false;
-		vars.toFEnchantressBossRoom = false;
-		vars.toFEnchantress1Kill = false;
-		vars.toFEnchantress2Kill = false;
-		vars.toFEntranceFadeOut = false;
-		vars.toFBossRushFadeOut = false;
+		vars.tofEntranceBossRoom = false;
+		vars.tofBossRushBossRoom = false;
+		vars.tofEnchantressBossRoom = false;
+		vars.tofEnchantress1Kill = false;
+		vars.tofEnchantress2Kill = false;
+		vars.tofEntranceFadeOut = false;
+		vars.tofBossRushFadeOut = false;
 		vars.blackKnight2FadeOut = false;
 		vars.stagesCount = 0;
 		vars.dream1 = false;
@@ -653,23 +682,23 @@ split
 				break;
 			case 17:
 				// Tower of Fate: Entrance
-				if (!vars.toFEntranceStage) {
-					vars.toFEntranceStage = true;
-					return settings["toFEntranceStage"];
+				if (!vars.tofEntranceStage) {
+					vars.tofEntranceStage = true;
+					return settings["tofEntranceStage"];
 				}
 				break;
 			case 18:
 				// Tower of Fate: Ascent
-				if (!vars.toFBossRushStage) {
-					vars.toFBossRushStage = true;
-					return settings["toFBossRushStage"];
+				if (!vars.tofBossRushStage) {
+					vars.tofBossRushStage = true;
+					return settings["tofBossRushStage"];
 				}
 				break;
 			case 19:
 				// Tower of Fate: ????????
-				if (!vars.toFEnchantressStage) {
-					vars.toFEnchantressStage = true;
-					return settings["toFEnchantressStage"];
+				if (!vars.tofEnchantressStage) {
+					vars.tofEnchantressStage = true;
+					return settings["tofEnchantressStage"];
 				}
 				break;
 			default:
@@ -681,98 +710,98 @@ split
 	switch((byte)vars.stageID.Current) {
 		case 8:
 			if (!vars.plainsBossRoom && 
-					(vars.playerPosX.Current >= 718 && vars.playerPosX.Current <= 750) &&
-					(vars.playerPosY.Current >= -407 && vars.playerPosY.Current <= -370)) {
+					(vars.playerPosX.Current >= vars.bossRoomBounds.PlainsX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.PlainsX[1]) &&
+					(vars.playerPosY.Current >= vars.bossRoomBounds.PlainsY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.PlainsY[1])) {
 				vars.plainsBossRoom = true;
 				return settings["plainsBossRoom"];
 			}
 			break;
 		case 9:
 			if (!vars.pridemoorKeepBossRoom && 
-					(vars.playerPosX.Current >= 757.7 && vars.playerPosX.Current <= 800) &&
-					(vars.playerPosY.Current >= -200 && vars.playerPosY.Current <= -188)) {
+					(vars.playerPosX.Current >= vars.bossRoomBounds.PridemoorKeepX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.PridemoorKeepX[1]) &&
+					(vars.playerPosY.Current >= vars.bossRoomBounds.PridemoorKeepY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.PridemoorKeepY[1])) {
 				vars.pridemoorKeepBossRoom = true;
 				return settings["pridemoorKeepBossRoom"];
 			}
 			break;
 		case 10:
 			if (!vars.lichYardBossRoom && 
-					(vars.playerPosX.Current >= 931.2 && vars.playerPosX.Current <= 970.5) &&
-					(vars.playerPosY.Current >= -122 && vars.playerPosY.Current <= -100)) {
+					(vars.playerPosX.Current >= vars.bossRoomBounds.LichYardX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.LichYardX[1]) &&
+					(vars.playerPosY.Current >= vars.bossRoomBounds.LichYardY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.LichYardY[1])) {
 				vars.lichYardBossRoom = true;
 				return settings["lichYardBossRoom"];
 			}
 			break;
 		case 11:
 			if (!vars.explodatoriumBossRoom && 
-					(vars.playerPosX.Current >= 958 && vars.playerPosX.Current <= 1000) &&
-					(vars.playerPosY.Current >= -230 && vars.playerPosY.Current <= -207)) {
+					(vars.playerPosX.Current >= vars.bossRoomBounds.ExplodatoriumX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.ExplodatoriumX[1]) &&
+					(vars.playerPosY.Current >= vars.bossRoomBounds.ExplodatoriumY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.ExplodatoriumY[1])) {
 				vars.explodatoriumBossRoom = true;
 				return settings["explodatoriumBossRoom"];
 			}
 			break;
 		case 12:
 			if (!vars.ironWhaleBossRoom && 
-					(vars.playerPosX.Current >= 836.7 && vars.playerPosX.Current <= 875) &&
-					(vars.playerPosY.Current >= -213 && vars.playerPosY.Current <= -195)) {
+					(vars.playerPosX.Current >= vars.bossRoomBounds.IronWhaleX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.IronWhaleX[1]) &&
+					(vars.playerPosY.Current >= vars.bossRoomBounds.IronWhaleY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.IronWhaleY[1])) {
 				vars.ironWhaleBossRoom = true;
 				return settings["ironWhaleBossRoom"];
 			}
 			break;
 		case 13:
 			if (!vars.lostCityBossRoom && 
-					(vars.playerPosX.Current >= 878.4 && vars.playerPosX.Current <= 916) &&
-					(vars.playerPosY.Current >= -258 && vars.playerPosY.Current <= -240)) {
+					(vars.playerPosX.Current >= vars.bossRoomBounds.LostCityX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.LostCityX[1]) &&
+					(vars.playerPosY.Current >= vars.bossRoomBounds.LostCityY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.LostCityY[1])) {
 				vars.lostCityBossRoom = true;
 				return settings["lostCityBossRoom"];
 			}
 			break;
 		case 14:
 			if (!vars.clockTowerBossRoom && 
-					(vars.playerPosX.Current >= 635.2 && vars.playerPosX.Current <= 673) &&
-					(vars.playerPosY.Current >= -255 && vars.playerPosY.Current <= -220)) {
+					(vars.playerPosX.Current >= vars.bossRoomBounds.ClockTowerX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.ClockTowerX[1]) &&
+					(vars.playerPosY.Current >= vars.bossRoomBounds.ClockTowerY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.ClockTowerY[1])) {
 				vars.clockTowerBossRoom = true;
 				return settings["clockTowerBossRoom"];
 			}
 			break;
 		case 15:
 			if (!vars.strandedShipBossRoom && 
-					(vars.playerPosX.Current >= 902.4 && vars.playerPosX.Current <= 942) &&
-					(vars.playerPosY.Current >= -100 && vars.playerPosY.Current <= -50)) {
+					(vars.playerPosX.Current >= vars.bossRoomBounds.StrandedShipX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.StrandedShipX[1]) &&
+					(vars.playerPosY.Current >= vars.bossRoomBounds.StrandedShipY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.StrandedShipY[1])) {
 				vars.strandedShipBossRoom = true;
 				return settings["strandedShipBossRoom"];
 			}
 			break;
 		case 16:
 			if (!vars.flyingMachineBossRoom && 
-					(vars.playerPosX.Current >= 926.4 && vars.playerPosX.Current <= 970) &&
-					(vars.playerPosY.Current >= -80 && vars.playerPosY.Current <= -30)) {
+					(vars.playerPosX.Current >= vars.bossRoomBounds.FlyingMachineX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.FlyingMachineX[1]) &&
+					(vars.playerPosY.Current >= vars.bossRoomBounds.FlyingMachineY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.FlyingMachineY[1])) {
 				vars.flyingMachineBossRoom = true;
 				return settings["flyingMachineBossRoom"];
 			}
 			break;
 		case 17:
-			if (!vars.toFEntranceBossRoom && 
-					(vars.playerPosX.Current >= 1036.8 && vars.playerPosX.Current <= 1070) &&
-					(vars.playerPosY.Current >= -120 && vars.playerPosY.Current <= -30)) {
-				vars.toFEntranceBossRoom = true;
-				return settings["toFEntranceBossRoom"];
+			if (!vars.tofEntranceBossRoom && 
+					(vars.playerPosX.Current >= vars.bossRoomBounds.EntranceX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.EntranceX[1]) &&
+					(vars.playerPosY.Current >= vars.bossRoomBounds.EntranceY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.EntranceY[1])) {
+				vars.tofEntranceBossRoom = true;
+				return settings["tofEntranceBossRoom"];
 			}
 			break;
 		case 18:
-			if (!vars.toFBossRushBossRoom && 
-					(vars.playerPosX.Current >= 663 && vars.playerPosX.Current <= 700) &&
-					(vars.playerPosY.Current >= -190 && vars.playerPosY.Current <= -169.4)) {
-				vars.toFBossRushBossRoom = true;
-				return settings["toFBossRushBossRoom"];
+			if (!vars.tofBossRushBossRoom && 
+					(vars.playerPosX.Current >= vars.bossRoomBounds.ToFBossRushX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.ToFBossRushX[1]) &&
+					(vars.playerPosY.Current >= vars.bossRoomBounds.ToFBossRushY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.ToFBossRushY[1])) {
+				vars.tofBossRushBossRoom = true;
+				return settings["tofBossRushBossRoom"];
 			}
 			break;
 		case 19:
-			if (!vars.toFEnchantressBossRoom && 
-					(vars.playerPosX.Current >= 433.6 && vars.playerPosX.Current <= 480) &&
-					(vars.playerPosY.Current >= -210 && vars.playerPosY.Current <= -169.4)) {
-				vars.toFEnchantressBossRoom = true;
-				return settings["toFEnchantressBossRoom"];
+			if (!vars.tofEnchantressBossRoom && 
+					(vars.playerPosX.Current >= vars.bossRoomBounds.ToFEnchantressX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.ToFEnchantressX[1]) &&
+					(vars.playerPosY.Current >= vars.bossRoomBounds.ToFEnchantressY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.ToFEnchantressY[1])) {
+				vars.tofEnchantressBossRoom = true;
+				return settings["tofEnchantressBossRoom"];
 			}
 			break;
 		default:
@@ -812,7 +841,7 @@ split
 				return settings["flyingMachineGold"];
 			case 17:
 				// Tower of Fate: Entrance
-				return settings["toFEntranceGold"];
+				return settings["tofEntranceGold"];
 			case 38:
 				// Black Knight 2
 				return settings["blackKnight2Gold"] && vars.plagueKnight.Current;
@@ -853,22 +882,22 @@ split
 				return settings["flyingMachineKill"];
 			case 17:
 				// Tower of Fate: Entrance
-				return settings["toFEntranceKill"];
+				return settings["tofEntranceKill"];
 			case 18:
 				// Tower of Fate: Ascent
-				return settings["toFBossRushKill"] && vars.bossKillCounter == 9;
+				return settings["tofBossRushKill"] && vars.bossKillCounter == 9;
 			case 19:
 				// Tower of Fate: ????????
-				if (!vars.toFEnchantress1Kill && vars.bossKillCounter == 1) {
-					vars.toFEnchantress1Kill = true;
-					return settings["toFEnchantress1Kill"];
+				if (!vars.tofEnchantress1Kill && vars.bossKillCounter == 1) {
+					vars.tofEnchantress1Kill = true;
+					return settings["tofEnchantress1Kill"];
 				}
-				else if (!vars.toFEnchantress2Kill && vars.bossKillCounter == 2) {
-					vars.toFEnchantress2Kill = true;
-					return settings["toFEnchantress2Kill"];
+				else if (!vars.tofEnchantress2Kill && vars.bossKillCounter == 2) {
+					vars.tofEnchantress2Kill = true;
+					return settings["tofEnchantress2Kill"];
 				}
 				else if (vars.bossKillCounter == 3) {
-					return settings["toFEnchantress3Kill"];
+					return settings["tofEnchantress3Kill"];
 				}
 				break;
 			case 38:
@@ -920,17 +949,17 @@ split
 				return settings["flyingMachineFadeOut"] && vars.stageID.Current == 24;
 			case 17:
 				// Tower of Fate: Entrance
-				if (!vars.toFEntranceFadeOut && vars.stageID.Current == 126 && vars.toFEntranceBossRoom) {
+				if (!vars.tofEntranceFadeOut && vars.stageID.Current == 126 && vars.tofEntranceBossRoom) {
 					vars.stagesCount = 0;
-					vars.toFEntranceFadeOut = true;
-					return settings["toFEntranceFadeOut"] && vars.stageID.Current == 126;
+					vars.tofEntranceFadeOut = true;
+					return settings["tofEntranceFadeOut"] && vars.stageID.Current == 126;
 				}
 				break;
 			case 18:
 				// Tower of Fate: Ascent
-				if (!vars.toFBossRushFadeOut && vars.stageID.Current == 126 && vars.toFBossRushBossRoom) {
-					vars.toFBossRushFadeOut = true;
-					return settings["toFBossRushFadeOut"] && vars.stageID.Current == 126;
+				if (!vars.tofBossRushFadeOut && vars.stageID.Current == 126 && vars.tofBossRushBossRoom) {
+					vars.tofBossRushFadeOut = true;
+					return settings["tofBossRushFadeOut"] && vars.stageID.Current == 126;
 				}
 				break;
 			case 38:
