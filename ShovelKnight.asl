@@ -298,7 +298,7 @@ init
 	bossRoomBounds.ToFEntranceY = new float[2]    {-120f,  -30f};
 	bossRoomBounds.ToFBossRushX = new float[2]    {663f,    700f};
 	bossRoomBounds.ToFBossRushY = new float[2]    {-190f,  -169.4f};
-	bossRoomBounds.ToFEnchantressX = new float[2] {-433.6f, 480f};
+	bossRoomBounds.ToFEnchantressX = new float[2] {433.6f, 480f};
 	bossRoomBounds.ToFEnchantressY = new float[2] {-210f,  -169.4f};
 
 	// REMINDER: The base address is always the same in each instance of the same version. You only need to scan for it in init when the game is loaded, and never again!
