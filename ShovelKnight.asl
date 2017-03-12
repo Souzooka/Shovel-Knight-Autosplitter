@@ -332,7 +332,7 @@ init
 
 	// SaveSlot offsets: Static
 	vars.saveSlotTarget = new SigScanTarget(2,
-		"C6 05 ?? ?? ?? ?? 09"	// Target Address
+		"C6 05 ?? ?? ?? ?? 14"	// Target Address
 		);
 
 	// Tentative, saveSlot might be 10 when in title for Specter
@@ -597,7 +597,7 @@ start
 		return vars.saveSlot.Current < 9 && vars.saveSlot.Old == 9;
 	}
 	else if (vars.specterOfTorment) {
-		return vars.saveSlot.Current < 10 && vars.saveSlot.Old == 10;
+		return vars.saveSlot.Current < 20 && vars.saveSlot.Old == 20;
 	}
 }
 
@@ -608,8 +608,13 @@ reset
 		return vars.saveSlot.Current == 9 && vars.saveSlot.Old != 9;
 	}
 	else if (vars.specterOfTorment) {
-		return vars.saveSlot.Current == 10 && vars.saveSlot.Old != 10;
+		return vars.saveSlot.Current == 20 && vars.saveSlot.Old != 20;
 	}
+
+
+	// contingency 
+
+
 }
 
 split
