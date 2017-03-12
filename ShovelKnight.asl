@@ -683,128 +683,128 @@ split
 				if (!vars.flyingMachineStage) {
 					vars.flyingMachineStage = true;
 					return settings["flyingMachineStage"];
-				}
-				break;
+			
+				brk;
 			case 17:
 				// Tower of Fate: Entrance
 				if (!vars.tofEntranceStage) {
 					vars.tofEntranceStage = true;
 					return settings["tofEntranceStage"];
 				}
-				break;
-			case 18:
+				brk;
+			case 1
 				// Tower of Fate: Ascent
 				if (!vars.tofBossRushStage) {
 					vars.tofBossRushStage = true;
 					return settings["tofBossRushStage"];
 				}
 				break;
-			case 19:
-				// Tower of Fate: ????????
+			case 1
+				//ower of Fate: ????????
 				if (!vars.tofEnchantressStage) {
 					vars.tofEnchantressStage = true;
 					return settings["tofEnchantressStage"];
 				}
 				break;
 			default:
-				return false;
-		}
+				rern false;
+	
 	}
 
 	// Bossroom transition splits
 	switch((byte)vars.stageID.Current) {
 		case 8:
 			if (!vars.plainsBossRoom && 
-					(vars.playerPosX.Current >= vars.bossRoomBounds.PlainsX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.PlainsX[1]) &&
-					(vars.playerPosY.Current >= vars.bossRoomBounds.PlainsY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.PlainsY[1])) {
+			(vars.ayerPosX.Current >= vars.bossRoomBounds.PlainsX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.PlainsX[1]) &&
+			(vars.ayerPosY.Current >= vars.bossRoomBounds.PlainsY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.PlainsY[1])) {
 				vars.plainsBossRoom = true;
 				return settings["plainsBossRoom"];
 			}
 			break;
 		case 9:
 			if (!vars.pridemoorKeepBossRoom && 
-					(vars.playerPosX.Current >= vars.bossRoomBounds.PridemoorKeepX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.PridemoorKeepX[1]) &&
-					(vars.playerPosY.Current >= vars.bossRoomBounds.PridemoorKeepY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.PridemoorKeepY[1])) {
+			(vars.playerPosX.Current >= vars.bossRoomBounds.PridemoorKeepX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.PridemoorKeepX[1]) &&
+			(vars.playerPosY.Current >= vars.bossRoomBounds.PridemoorKeepY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.PridemoorKeepY[1])) {
 				vars.pridemoorKeepBossRoom = true;
 				return settings["pridemoorKeepBossRoom"];
 			}
 			break;
 		case 10:
 			if (!vars.lichYardBossRoom && 
-					(vars.playerPosX.Current >= vars.bossRoomBounds.LichYardX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.LichYardX[1]) &&
-					(vars.playerPosY.Current >= vars.bossRoomBounds.LichYardY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.LichYardY[1])) {
+			(vars.playerPosX.Current >= vars.bossRoomBounds.LichYardX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.LichYardX[1]) &&
+			(vars.playerPosY.Current >= vars.bossRoomBounds.LichYardY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.LichYardY[1])) {
 				vars.lichYardBossRoom = true;
 				return settings["lichYardBossRoom"];
 			}
 			break;
 		case 11:
 			if (!vars.explodatoriumBossRoom && 
-					(vars.playerPosX.Current >= vars.bossRoomBounds.ExplodatoriumX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.ExplodatoriumX[1]) &&
-					(vars.playerPosY.Current >= vars.bossRoomBounds.ExplodatoriumY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.ExplodatoriumY[1])) {
+			(vars.playerPosX.Current >= vars.bossRoomBounds.ExplodatoriumX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.ExplodatoriumX[1]) &&
+			(vars.playerPosY.Current >= vars.bossRoomBounds.ExplodatoriumY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.ExplodatoriumY[1])) {
 				vars.explodatoriumBossRoom = true;
 				return settings["explodatoriumBossRoom"];
 			}
 			break;
 		case 12:
 			if (!vars.ironWhaleBossRoom && 
-					(vars.playerPosX.Current >= vars.bossRoomBounds.IronWhaleX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.IronWhaleX[1]) &&
-					(vars.playerPosY.Current >= vars.bossRoomBounds.IronWhaleY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.IronWhaleY[1])) {
+			(vars.playerPosX.Current >= vars.bossRoomBounds.IronWhaleX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.IronWhaleX[1]) &&
+			(vars.playerPosY.Current >= vars.bossRoomBounds.IronWhaleY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.IronWhaleY[1])) {
 				vars.ironWhaleBossRoom = true;
 				return settings["ironWhaleBossRoom"];
 			}
 			break;
 		case 13:
 			if (!vars.lostCityBossRoom && 
-					(vars.playerPosX.Current >= vars.bossRoomBounds.LostCityX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.LostCityX[1]) &&
-					(vars.playerPosY.Current >= vars.bossRoomBounds.LostCityY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.LostCityY[1])) {
+			(vars.playerPosX.Current >= vars.bossRoomBounds.LostCityX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.LostCityX[1]) &&
+			(vars.playerPosY.Current >= vars.bossRoomBounds.LostCityY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.LostCityY[1])) {
 				vars.lostCityBossRoom = true;
 				return settings["lostCityBossRoom"];
 			}
 			break;
 		case 14:
 			if (!vars.clockTowerBossRoom && 
-					(vars.playerPosX.Current >= vars.bossRoomBounds.ClockTowerX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.ClockTowerX[1]) &&
-					(vars.playerPosY.Current >= vars.bossRoomBounds.ClockTowerY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.ClockTowerY[1])) {
+			(vars.playerPosX.Current >= vars.bossRoomBounds.ClockTowerX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.ClockTowerX[1]) &&
+			(vars.playerPosY.Current >= vars.bossRoomBounds.ClockTowerY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.ClockTowerY[1])) {
 				vars.clockTowerBossRoom = true;
 				return settings["clockTowerBossRoom"];
 			}
 			break;
 		case 15:
 			if (!vars.strandedShipBossRoom && 
-					(vars.playerPosX.Current >= vars.bossRoomBounds.StrandedShipX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.StrandedShipX[1]) &&
-					(vars.playerPosY.Current >= vars.bossRoomBounds.StrandedShipY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.StrandedShipY[1])) {
+			(vars.playerPosX.Current >= vars.bossRoomBounds.StrandedShipX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.StrandedShipX[1]) &&
+			(vars.playerPosY.Current >= vars.bossRoomBounds.StrandedShipY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.StrandedShipY[1])) {
 				vars.strandedShipBossRoom = true;
 				return settings["strandedShipBossRoom"];
 			}
 			break;
 		case 16:
 			if (!vars.flyingMachineBossRoom && 
-					(vars.playerPosX.Current >= vars.bossRoomBounds.FlyingMachineX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.FlyingMachineX[1]) &&
-					(vars.playerPosY.Current >= vars.bossRoomBounds.FlyingMachineY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.FlyingMachineY[1])) {
+			(vars.playerPosX.Current >= vars.bossRoomBounds.FlyingMachineX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.FlyingMachineX[1]) &&
+			(vars.playerPosY.Current >= vars.bossRoomBounds.FlyingMachineY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.FlyingMachineY[1])) {
 				vars.flyingMachineBossRoom = true;
 				return settings["flyingMachineBossRoom"];
 			}
 			break;
 		case 17:
 			if (!vars.tofEntranceBossRoom && 
-					(vars.playerPosX.Current >= vars.bossRoomBounds.EntranceX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.EntranceX[1]) &&
-					(vars.playerPosY.Current >= vars.bossRoomBounds.EntranceY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.EntranceY[1])) {
+			(vars.playerPosX.Current >= vars.bossRoomBounds.EntranceX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.EntranceX[1]) &&
+			(vars.playerPosY.Current >= vars.bossRoomBounds.EntranceY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.EntranceY[1])) {
 				vars.tofEntranceBossRoom = true;
 				return settings["tofEntranceBossRoom"];
 			}
 			break;
 		case 18:
 			if (!vars.tofBossRushBossRoom && 
-					(vars.playerPosX.Current >= vars.bossRoomBounds.ToFBossRushX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.ToFBossRushX[1]) &&
-					(vars.playerPosY.Current >= vars.bossRoomBounds.ToFBossRushY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.ToFBossRushY[1])) {
+			(vars.playerPosX.Current >= vars.bossRoomBounds.ToFBossRushX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.ToFBossRushX[1]) &&
+			(vars.playerPosY.Current >= vars.bossRoomBounds.ToFBossRushY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.ToFBossRushY[1])) {
 				vars.tofBossRushBossRoom = true;
 				return settings["tofBossRushBossRoom"];
 			}
 			break;
 		case 19:
 			if (!vars.tofEnchantressBossRoom && 
-					(vars.playerPosX.Current >= vars.bossRoomBounds.ToFEnchantressX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.ToFEnchantressX[1]) &&
-					(vars.playerPosY.Current >= vars.bossRoomBounds.ToFEnchantressY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.ToFEnchantressY[1])) {
+			(vars.playerPosX.Current >= vars.bossRoomBounds.ToFEnchantressX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.ToFEnchantressX[1]) &&
+			(vars.playerPosY.Current >= vars.bossRoomBounds.ToFEnchantressY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.ToFEnchantressY[1])) {
 				vars.tofEnchantressBossRoom = true;
 				return settings["tofEnchantressBossRoom"];
 			}
