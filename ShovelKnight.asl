@@ -683,40 +683,40 @@ split
 				if (!vars.flyingMachineStage) {
 					vars.flyingMachineStage = true;
 					return settings["flyingMachineStage"];
-			
-				brk;
+				}
+				break;
 			case 17:
 				// Tower of Fate: Entrance
 				if (!vars.tofEntranceStage) {
 					vars.tofEntranceStage = true;
 					return settings["tofEntranceStage"];
 				}
-				brk;
-			case 1
+				break;
+			case 18:
 				// Tower of Fate: Ascent
 				if (!vars.tofBossRushStage) {
 					vars.tofBossRushStage = true;
 					return settings["tofBossRushStage"];
 				}
 				break;
-			case 1
-				//ower of Fate: ????????
+			case 19:
+				// Tower of Fate: ????????
 				if (!vars.tofEnchantressStage) {
 					vars.tofEnchantressStage = true;
 					return settings["tofEnchantressStage"];
 				}
 				break;
 			default:
-				rern false;
-	
+				return false;
+			}
 	}
 
 	// Bossroom transition splits
 	switch((byte)vars.stageID.Current) {
 		case 8:
 			if (!vars.plainsBossRoom && 
-			(vars.ayerPosX.Current >= vars.bossRoomBounds.PlainsX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.PlainsX[1]) &&
-			(vars.ayerPosY.Current >= vars.bossRoomBounds.PlainsY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.PlainsY[1])) {
+			(vars.playerPosX.Current >= vars.bossRoomBounds.PlainsX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.PlainsX[1]) &&
+			(vars.playerPosY.Current >= vars.bossRoomBounds.PlainsY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.PlainsY[1])) {
 				vars.plainsBossRoom = true;
 				return settings["plainsBossRoom"];
 			}
