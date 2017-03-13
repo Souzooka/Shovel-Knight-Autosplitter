@@ -294,12 +294,12 @@ init
 	bossRoomBounds.StrandedShipY = new float[2]   {-100f,  -60f};
 	bossRoomBounds.FlyingMachineX = new float[2]  {926.4f,  970f};
 	bossRoomBounds.FlyingMachineY = new float[2]  {-80f,   -30f};
-	bossRoomBounds.ToFEntranceX = new float[2]    {1036.8f, 1070f};
-	bossRoomBounds.ToFEntranceY = new float[2]    {-120f,  -30f};
-	bossRoomBounds.ToFBossRushX = new float[2]    {663f,    700f};
-	bossRoomBounds.ToFBossRushY = new float[2]    {-190f,  -169.4f};
-	bossRoomBounds.ToFEnchantressX = new float[2] {433.6f, 480f};
-	bossRoomBounds.ToFEnchantressY = new float[2] {-210f,  -169.4f};
+	bossRoomBounds.tofEntranceX = new float[2]    {1036.8f, 1070f};
+	bossRoomBounds.tofEntranceY = new float[2]    {-120f,  -30f};
+	bossRoomBounds.tofBossRushX = new float[2]    {663f,    700f};
+	bossRoomBounds.tofBossRushY = new float[2]    {-190f,  -169.4f};
+	bossRoomBounds.tofEnchantressX = new float[2] {433.6f, 480f};
+	bossRoomBounds.tofEnchantressY = new float[2] {-210f,  -169.4f};
 
 	// REMINDER: The base address is always the same in each instance of the same version. You only need to scan for it in init when the game is loaded, and never again!
 	// REMINDER: The only things which may need readjusting are the pointer values.
@@ -787,24 +787,24 @@ split
 			break;
 		case 17:
 			if (!vars.tofEntranceBossRoom && 
-			(vars.playerPosX.Current >= vars.bossRoomBounds.EntranceX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.EntranceX[1]) &&
-			(vars.playerPosY.Current >= vars.bossRoomBounds.EntranceY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.EntranceY[1])) {
+			(vars.playerPosX.Current >= vars.bossRoomBounds.tofEntranceX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.tofEntranceX[1]) &&
+			(vars.playerPosY.Current >= vars.bossRoomBounds.tofEntranceY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.tofEntranceY[1])) {
 				vars.tofEntranceBossRoom = true;
 				return settings["tofEntranceBossRoom"];
 			}
 			break;
 		case 18:
 			if (!vars.tofBossRushBossRoom && 
-			(vars.playerPosX.Current >= vars.bossRoomBounds.ToFBossRushX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.ToFBossRushX[1]) &&
-			(vars.playerPosY.Current >= vars.bossRoomBounds.ToFBossRushY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.ToFBossRushY[1])) {
+			(vars.playerPosX.Current >= vars.bossRoomBounds.tofBossRushX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.tofBossRushX[1]) &&
+			(vars.playerPosY.Current >= vars.bossRoomBounds.tofBossRushY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.tofBossRushY[1])) {
 				vars.tofBossRushBossRoom = true;
 				return settings["tofBossRushBossRoom"];
 			}
 			break;
 		case 19:
 			if (!vars.tofEnchantressBossRoom && 
-			(vars.playerPosX.Current >= vars.bossRoomBounds.ToFEnchantressX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.ToFEnchantressX[1]) &&
-			(vars.playerPosY.Current >= vars.bossRoomBounds.ToFEnchantressY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.ToFEnchantressY[1])) {
+			(vars.playerPosX.Current >= vars.bossRoomBounds.tofEnchantressX[0] && vars.playerPosX.Current <= vars.bossRoomBounds.tofEnchantressX[1]) &&
+			(vars.playerPosY.Current >= vars.bossRoomBounds.tofEnchantressY[0] && vars.playerPosY.Current <= vars.bossRoomBounds.tofEnchantressY[1])) {
 				vars.tofEnchantressBossRoom = true;
 				return settings["tofEnchantressBossRoom"];
 			}
