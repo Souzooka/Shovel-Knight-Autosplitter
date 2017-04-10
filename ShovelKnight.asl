@@ -186,9 +186,9 @@ startup
 	settings.Add("blackKnight2FadeOut", true, "Black Knight 2 (PK Only)", "splitsFadeOut");
 
 	// Dream Splits
-	settings.Add("dream1", true, "Dream 1", "splitsDreams");
-	settings.Add("dream2", true, "Dream 2", "splitsDreams");
-	settings.Add("dream3", true, "Dream 3", "splitsDreams");
+	// settings.Add("dream1", true, "Dream 1", "splitsDreams");
+	// settings.Add("dream2", true, "Dream 2", "splitsDreams");
+	// settings.Add("dream3", true, "Dream 3", "splitsDreams");
 
 	// SETTINGS END
 }
@@ -204,14 +204,8 @@ init
 	vars.bossRecentlyDefeated = false;
 	vars.bossKillCounter = 0;
 
-	vars.versionFound = false;
-	vars.version = "";
-	vars.versionNumber = 2.4;
-	vars.specterOfTorment = false;
-
 	vars.rescanStaticStopwatch = new Stopwatch();
 	vars.rescanHPDisplayStopwatch = new Stopwatch();
-	vars.rescanVersionStopwatch = new Stopwatch();
 	vars.recentlyDeadStopwatch = new Stopwatch();
 
 	vars.watchers = new MemoryWatcherList();
@@ -224,6 +218,7 @@ init
 	vars.hpBossDisplay = new MemoryWatcher<float>(IntPtr.Zero);
 	vars.playerPosX = new MemoryWatcher<float>(IntPtr.Zero);
 	vars.playerPosY = new MemoryWatcher<float>(IntPtr.Zero);
+	vars.shieldKnightY = new MemoryWatcher<float>(IntPtr.Zero);
 
 	vars.hpPlayerDisplayCodeAddr = IntPtr.Zero;
 	vars.versionCodeAddr = IntPtr.Zero;
@@ -271,6 +266,8 @@ init
 	vars.dream1 = false;
 	vars.dream2 = false;
 	vars.dream3 = false;
+	vars.dreamsCount = 0;
+	vars.dreamsCheck = false;
 
 	// bossroom coordinate ranges
 	// min, max
@@ -440,60 +437,41 @@ init
 			});
 		}
 
-		vars.playerPosPointerLevel1 = memory.ReadValue<int>((IntPtr)vars.hpPlayerDisplayBaseAddr) + 0x84;
-		vars.playerPosPointerLevel2 = memory.ReadValue<int>((IntPtr)vars.playerPosPointerLevel1) + 0xB40;
-		vars.playerPosPointerLevel3 = memory.ReadValue<int>((IntPtr)vars.playerPosPointerLevel2) + 0x20;
+		vars.playerPosPointerLevel1 = memory.ReadValue<int>((IntPtr)vars.hpPlayerDisplayBaseAddr) + 0x4;
+		vars.playerPosPointerLevel2 = memory.ReadValue<int>((IntPtr)vars.playerPosPointerLevel1) + 0x60;
+		vars.playerPosPointerLevel3 = memory.ReadValue<int>((IntPtr)vars.playerPosPointerLevel2) + 0x4;
+		vars.playerPosPointerLevel4 = memory.ReadValue<int>((IntPtr)vars.playerPosPointerLevel3) + 0x24;
 
 		vars.playerPosXAddrOld = vars.playerPosXAddr;
 
 		vars.playerPosXAddr = memory.ReadValue<int>((IntPtr)vars.playerPosPointerLevel3) + 0xC;
 		vars.playerPosYAddr = memory.ReadValue<int>((IntPtr)vars.playerPosPointerLevel3) + 0x10;
+		vars.shieldKnightYAddr = memory.ReadValue<int>((IntPtr)vars.playerPosPointerLevel3) + 0x290;
 
 		if ((IntPtr)vars.playerPosXAddrOld == (IntPtr)0xC && (IntPtr)vars.playerPosXAddr != (IntPtr)0xC) {
 
 			vars.playerPosX = new MemoryWatcher<float>((IntPtr)vars.playerPosXAddr);
 			vars.playerPosY = new MemoryWatcher<float>((IntPtr)vars.playerPosYAddr);
+			vars.shieldKnightY = new MemoryWatcher<float>((IntPtr)vars.shieldKnightYAddr);
 
 			vars.watchers.AddRange(new MemoryWatcher[]
 			{
 				vars.playerPosX,
-				vars.playerPosY
+				vars.playerPosY,
+				vars.shieldKnightY
 			});
 		}
 
 	};
 
-	Action<string> RescanVersion = (text) => {
-		if ((IntPtr)vars.versionCodeAddr == IntPtr.Zero) {
-			vars.versionCodeAddr = scanner.Scan(vars.versionTarget);
-			vars.versionBaseAddr = memory.ReadValue<int>((IntPtr)vars.versionCodeAddr);
-		}
-
-		vars.versionPointerLevel1 = memory.ReadValue<int>((IntPtr)vars.versionBaseAddr) + 0x14;
-
-		vars.versionPointerLevel2 = memory.ReadValue<int>((IntPtr)vars.versionPointerLevel1) + 0x34;
-
-		vars.versionAddr = memory.ReadValue<int>((IntPtr)vars.versionPointerLevel2) + 0x60;
-
-		vars.version = memory.ReadString((IntPtr)vars.versionAddr, 256);
-
-		if (vars.version.Length > 7 && vars.version.Substring(0, 7) == "version") {
-			vars.versionFound = true;
-			version = vars.version;
-			vars.versionNumber = Convert.ToSingle(vars.version.Substring(8, 3));
-		}
-	};
-
 	vars.RescanStatic = RescanStatic;
 	vars.RescanHPDisplay = RescanHPDisplay;
-	vars.RescanVersion = RescanVersion;
 
 	// SCANNING ACTIONS END
 }
 
 update
 {
-
 	vars.watchers.UpdateAll(game);
 	// Note: "ShovelKnight.exe"+0x0 isn't a null area of memory 
 	// Rescan Static logic start (This shouldn't have to be used more than once!)
@@ -519,20 +497,6 @@ update
 	}
 	// Rescan HP Display logic end
 
-	// Rescan Version logic start
-	// ONLY WORKS IF THE SCRIPT IS RUNNING BEFORE A SAVE IS SELECTED!
-	// There is no *real* way to automatically detect the version from what I've found.
-	// We want to know what the version is so in case the Specter Knight patch just renders the game into pieces, we might still be able to use one script for all executables.
-	if (!vars.versionFound && !vars.rescanVersionStopwatch.IsRunning) {
-		vars.rescanVersionStopwatch.Start();
-	}
-
-	if (vars.rescanVersionStopwatch.ElapsedMilliseconds >= 500) {
-		vars.rescanVersionStopwatch.Reset();
-		vars.RescanVersion("");
-	}
-	// Rescan Version logic end
-
 	// current.HPPlayerDisplay does not become null when respawning
 	if (vars.hpBossDisplay.Current == 0 && vars.hpPlayerDisplay.Current > 0 && vars.hpBossDisplay.Old != 0) {
 		vars.bossRecentlyDefeated = true;
@@ -544,6 +508,7 @@ update
 		vars.recentlyDeadStopwatch.Restart();
 		vars.bossRecentlyDefeated = false;
 		vars.bossKillCounter = 0;
+		vars.RescanHPDisplay("");
 	}
 
 	// the Player HP can possibly be shown as boss HP for a frame after spawning, so add a check
@@ -585,8 +550,9 @@ update
 		vars.dream1 = false;
 		vars.dream2 = false;
 		vars.dream3 = false;
+		vars.dreamsCount = 0;
+		vars.dreamsCheck = false;
 	}
-
 	
 }
 
@@ -597,7 +563,7 @@ start
 		return vars.saveSlot.Current < 9 && vars.saveSlot.Old == 9;
 	}
 	else if (vars.specterOfTorment) {
-		return vars.saveSlot.Current < 20 && vars.saveSlot.Old == 20;
+		return vars.saveSlot.Current > 0 && vars.saveSlot.Old == 0;
 	}
 }
 
@@ -608,7 +574,7 @@ reset
 		return vars.saveSlot.Current == 9 && vars.saveSlot.Old != 9;
 	}
 	else if (vars.specterOfTorment) {
-		return vars.saveSlot.Current == 20 && vars.saveSlot.Old != 20;
+		return vars.saveSlot.Current == 0 && vars.saveSlot.Old != 0;
 	}
 
 
@@ -979,30 +945,45 @@ split
 		}
 	}
 
-
 	// Dream Splits
-	if (vars.stageID.Current == 126 && vars.stagesCount % 3 == 0) {
-		switch ((byte)vars.stagesCount) {
-			case 3:
-				if (!vars.dream1) {
+	if (vars.stageID.Current == 24 && vars.shieldKnightY.Current <= -250 && !vars.dreamsCheck) {
+
+		// for some weird reason, vars.ShieldKnightY.Old just didn't seem to work correctly, so have this weird variable
+		vars.dreamsCheck = true;
+		//
+		vars.dreamsCount++;
+	}
+
+	if (vars.stageID.Current == 126 && vars.stageID.Old != 126) 
+	{
+		switch ((byte)vars.dreamsCount) 
+		{
+			case 1:
+				if (!vars.dream1) 
+				{
 					vars.dream1 = true;
+					vars.dreamsCheck = false;
 					return settings["dream1"];
 				}
 				break;
-			case 6:
-				if (!vars.dream2) {
+			case 2:
+				if (!vars.dream2) 
+				{
 					vars.dream2 = true;
+					vars.dreamsCheck = false;
 					return settings["dream2"];
 				}
 				break;
-			case 9:
-				if (!vars.dream3) {
+			case 3:
+				if (!vars.dream3) 
+				{
 					vars.dream3 = true;
+					vars.dreamsCheck = false;
 					return settings["dream3"];
 				}
 				break;
 			default:
 				break;
 		}
-	}
+	}	
 }
