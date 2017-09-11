@@ -100,7 +100,7 @@ split
 		// Tinker
 		if (vars.stageIDs[current.stageID] == "clockTower" && vars.bossKillCounter != 2 - 1) 
 		{ 
-			++vars.BossKillCounter;
+			++vars.bossKillCounter;
 			return false; 
 		}
 
@@ -114,7 +114,7 @@ split
 		// Enchantress Splits
 		if (vars.stageIDs[current.stageID] == "tofEnchantress")
 		{	
-			++vars.BossKillCounter;
+			++vars.bossKillCounter;
 			return settings["tofEnchantress" + vars.bossKillCounter.ToString() + "Kill"];
 		}
 
