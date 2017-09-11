@@ -34,7 +34,7 @@ startup
 	settings.Add("flyingMachineKill", true, "Propeller Knight (Flying Machine)", "splitsKill");
 	settings.Add("tofEntranceKill", true, "Black Knight 3 (Tower of Fate: Entrance)", "splitsKill");
 	settings.Add("blackKnight2Kill", true, "Black Knight 2 (PK Only)", "splitsKill");
-	settings.Add("tofBossRushKill", true, "Boss Rush (Tower of Fate: Ascent)", "splitsKill");
+	settings.Add("tofAscentKill", true, "Boss Rush (Tower of Fate: Ascent)", "splitsKill");
 	settings.Add("tofEnchantress1Kill", true, "Enchantress 1 (Tower of Fate: ????????)", "splitsKill");
 	settings.Add("tofEnchantress2Kill", true, "Enchantress 2 (Tower of Fate: ????????)", "splitsKill");
 	settings.Add("tofEnchantress3Kill", true, "Enchantress 3 (Tower of Fate: ????????) (PK Only)", "splitsKill");
