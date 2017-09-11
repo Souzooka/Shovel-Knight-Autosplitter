@@ -95,7 +95,7 @@ reset
 split
 {
 	// On Kill splits
-	if (current.bossHP == 0 && old.bossHP != 0 && current.playerHP != 0) 
+	if (current.bossHP == 0 && old.bossHP != 0 && current.playerHP != 0 && old.playerHP != 0) 
 	{	
 		// Tinker
 		if (vars.stageIDs[current.stageID] == "clockTower" && vars.bossKillCounter != 2 - 1) 
