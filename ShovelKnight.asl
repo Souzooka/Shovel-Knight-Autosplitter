@@ -40,8 +40,10 @@ startup
 	settings.Add("blackKnight2Kill", true, "Black Knight 2 (PK Only)", "splitsKill");
 	settings.Add("tofAscentKill", true, "Boss Rush (Tower of Fate: Ascent)", "splitsKill");
 	settings.Add("tofEnchantress1Kill", true, "Enchantress 1 (Tower of Fate: ????????)", "splitsKill");
-	settings.Add("tofEnchantress2Kill", true, "Enchantress 2 (Tower of Fate: ????????)", "splitsKill");
+	settings.Add("tofEnchantress2Kill", true, "Enchantress 2 / Dark Reize (Specter) (Tower of Fate: ????????)", "splitsKill");
 	settings.Add("tofEnchantress3Kill", true, "Enchantress 3 (Tower of Fate: ????????) (PK Only)", "splitsKill");
+	settings.Add("darkReizeKill", true, "Dark Reize (Specter Knight)", "splitsKill");
+	settings.Add("shieldKnightKill", true, "Shield Knight (Specter Knight)", "splitsKill");
 
 	// On Gold Splits
 	settings.Add("plainsGold", true, "Black Knight 1 (The Plains)", "splitsGold");
@@ -55,6 +57,7 @@ startup
 	settings.Add("flyingMachineGold", true, "Propeller Knight (Flying Machine)", "splitsGold");
 	settings.Add("tofEntranceGold", true, "Black Knight 3 (Tower of Fate: Entrance)", "splitsGold");
 	settings.Add("blackKnight2Gold", true, "Black Knight 2 (PK Only)", "splitsGold");
+	settings.Add("darkReizeGold", true, "Dark Reize (Specter Knight)", "splitsGold");
 }
 
 init 
@@ -76,6 +79,8 @@ init
 		{20, "tofEntrance"},
 		{21, "tofAscent"},
 		{22, "tofEnchantress"},
+		{24, "darkReize"},
+		{38, "shieldKnight"},
 		{41, "blackKnight2"},
 	};
 
@@ -142,6 +147,18 @@ split
 			return settings["blackKnight2Kill"] && vars.characterIDs[current.characterID] == "plagueKnight"; 
 		}
 
+		// Reize
+		if (vars.stageIDs[current.stageID] == "reize")
+		{
+			return settings["reizeKill"] && vars.characterIDs[current.characterID] == "specterKnight"; 
+		}
+
+		// Shield Knight
+		if (vars.stageIDs[current.stageID] == "shieldKnight")
+		{
+			return settings["shieldKnightKill"] && vars.characterIDs[current.characterID] == "specterKnight"; 
+		}
+
 		// Everything else
 		if (!vars.stageIDs.ContainsKey(current.stageID)) { return false; }
 
@@ -169,6 +186,12 @@ split
 		if (vars.stageIDs[current.stageID] == "blackKnight2") 
 		{ 
 			return settings["blackKnight2Gold"] && vars.characterIDs[current.characterID] == "plagueKnight"; 
+		}
+
+		// Reize
+		if (vars.stageIDs[current.stageID] == "reize")
+		{
+			return settings["reizeGold"] && vars.characterIDs[current.characterID] == "specterKnight"; 
 		}
 
 		// Everything else
