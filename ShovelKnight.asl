@@ -7,7 +7,7 @@ state("ShovelKnight")
 	bool gameStarted : 0x7C263C;
 
 	// Player stats
-	bool characterID : 0x7BD408;
+	byte characterID : 0x7BD408;
 	int playerGold : 0x7C266C;
 	float playerHP : 0x76D9FC, 0xA8, 0x5DC, 0x18, 0x2C;
 
@@ -15,7 +15,7 @@ state("ShovelKnight")
 	float bossHP : 0x76D9FC, 0xA8, 0x5E4, 0x18, 0x2C;
 
 	// Misc stats
-	byte stageID : 0x7C363C;
+	byte stageID : 0x7C673C;
 }
 
 startup
@@ -98,7 +98,7 @@ init
 }
 
 update 
-{
+{	
 	if (current.playerHP == 0)
 	{
 		vars.bossKillCounter = 0;
@@ -122,6 +122,7 @@ split
 	if (current.bossHP == 0 && old.bossHP != 0 && current.playerHP != 0 && old.playerHP != 0) 
 	{	
 		++vars.bossKillCounter;
+		if (!vars.stageIDs.ContainsKey(current.stageID)) { return false; }
 
 		// Tinker
 		if (vars.stageIDs[current.stageID] == "clockTower" && vars.bossKillCounter != 2) 
@@ -148,9 +149,9 @@ split
 		}
 
 		// Reize
-		if (vars.stageIDs[current.stageID] == "reize")
+		if (vars.stageIDs[current.stageID] == "darkReize")
 		{
-			return settings["reizeKill"] && vars.characterIDs[current.characterID] == "specterKnight"; 
+			return settings["darkReizeKill"] && vars.characterIDs[current.characterID] == "specterKnight"; 
 		}
 
 		// Shield Knight
@@ -160,7 +161,6 @@ split
 		}
 
 		// Everything else
-		if (!vars.stageIDs.ContainsKey(current.stageID)) { return false; }
 
 		// Settings has no "ContainsKey"-like method, so we have to try/catch instead
 		try
@@ -176,6 +176,8 @@ split
 	// On Gold splits
 	if (vars.bossKillCounter > 0 && current.playerGold > old.playerGold)
 	{
+		if (!vars.stageIDs.ContainsKey(current.stageID)) { return false; }
+
 		// Tinker
 		if (vars.stageIDs[current.stageID] == "clockTower" && vars.bossKillCounter != 2) 
 		{ 
@@ -189,13 +191,12 @@ split
 		}
 
 		// Reize
-		if (vars.stageIDs[current.stageID] == "reize")
+		if (vars.stageIDs[current.stageID] == "darkReize")
 		{
-			return settings["reizeGold"] && vars.characterIDs[current.characterID] == "specterKnight"; 
+			return settings["darkReizeGold"] && vars.characterIDs[current.characterID] == "specterKnight"; 
 		}
 
 		// Everything else
-		if (!vars.stageIDs.ContainsKey(current.stageID)) { return false; }
 
 		try
 		{
