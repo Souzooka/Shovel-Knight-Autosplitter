@@ -1,11 +1,14 @@
 state("ShovelKnight")
 {
+	// Note: HP values use the HUD display values, not the actual value.
+
 	// Start/Reset
 	// This variable may be tentative
 	bool gameStarted : 0x7C263C;
 
 	// Player stats
 	bool characterID : 0x7BD408;
+	int playerGold : 0x7C266C;
 	float playerHP : 0x76D9FC, 0xA8, 0x5DC, 0x18, 0x2C;
 
 	// Boss stats
@@ -20,6 +23,7 @@ startup
 	// SETTINGS
 	// Header settings
 	settings.Add("splits", true, "Splits");
+	settings.Add("splitsGold", false, "Stage Splits (on boss gold)", "splits");
 	settings.Add("splitsKill", true, "Stage Splits (on boss kill)", "splits");
 
 	// On Kill Splits
@@ -38,6 +42,19 @@ startup
 	settings.Add("tofEnchantress1Kill", true, "Enchantress 1 (Tower of Fate: ????????)", "splitsKill");
 	settings.Add("tofEnchantress2Kill", true, "Enchantress 2 (Tower of Fate: ????????)", "splitsKill");
 	settings.Add("tofEnchantress3Kill", true, "Enchantress 3 (Tower of Fate: ????????) (PK Only)", "splitsKill");
+
+	// On Gold Splits
+	settings.Add("plainsGold", true, "Black Knight 1 (The Plains)", "splitsGold");
+	settings.Add("pridemoorKeepGold", true, "King Knight (Pridemoor Keep)", "splitsGold");
+	settings.Add("lichYardGold", true, "Specter Knight (Lich Yard)", "splitsGold");
+	settings.Add("explodatoriumGold", true, "Plague Knight (Explodatorium)", "splitsGold");
+	settings.Add("ironWhaleGold", true, "Treasure Knight (Iron Whale)", "splitsGold");
+	settings.Add("lostCityGold", true, "Mole Knight (Lost City)", "splitsGold");
+	settings.Add("clockTowerGold", true, "Tinker Knight (Clock Tower)", "splitsGold");
+	settings.Add("strandedShipGold", true, "Polar Knight (Stranded Ship)", "splitsGold");
+	settings.Add("flyingMachineGold", true, "Propeller Knight (Flying Machine)", "splitsGold");
+	settings.Add("tofEntranceGold", true, "Black Knight 3 (Tower of Fate: Entrance)", "splitsGold");
+	settings.Add("blackKnight2Gold", true, "Black Knight 2 (PK Only)", "splitsGold");
 }
 
 init 
@@ -70,6 +87,8 @@ init
 		{3, "kingKnight"}
 	};
 
+	// Counts how many boss stages the player has defeated without dying or going back to the map
+	// Used for multi-stage bosses
 	vars.bossKillCounter = 0;
 }
 
@@ -97,33 +116,71 @@ split
 	// On Kill splits
 	if (current.bossHP == 0 && old.bossHP != 0 && current.playerHP != 0 && old.playerHP != 0) 
 	{	
+		++vars.bossKillCounter;
+
 		// Tinker
-		if (vars.stageIDs[current.stageID] == "clockTower" && vars.bossKillCounter != 2 - 1) 
+		if (vars.stageIDs[current.stageID] == "clockTower" && vars.bossKillCounter != 2) 
 		{ 
-			++vars.bossKillCounter;
 			return false; 
 		}
 
 		// Boss Rush
-		if (vars.stageIDs[current.stageID] == "tofAscent" && vars.bossKillCounter != 9 - 1) 
+		if (vars.stageIDs[current.stageID] == "tofAscent" && vars.bossKillCounter != 9) 
 		{ 
-			++vars.bossKillCounter; 
 			return false;
 		}
 
 		// Enchantress Splits
 		if (vars.stageIDs[current.stageID] == "tofEnchantress")
 		{	
-			++vars.bossKillCounter;
 			return settings["tofEnchantress" + vars.bossKillCounter.ToString() + "Kill"];
 		}
 
 		// Black Knight 2
-		if (vars.stageIDs[current.stageID] == "blackKnight2") { return settings["blackKnight2Kill"] && vars.characterIDs[current.characterID] == "plagueKnight"; }
+		if (vars.stageIDs[current.stageID] == "blackKnight2") 
+		{ 
+			return settings["blackKnight2Kill"] && vars.characterIDs[current.characterID] == "plagueKnight"; 
+		}
 
 		// Everything else
 		if (!vars.stageIDs.ContainsKey(current.stageID)) { return false; }
 
-		return settings[vars.stageIDs[current.stageID] + "Kill"];
+		// Settings has no "ContainsKey"-like method, so we have to try/catch instead
+		try
+		{
+			return settings[vars.stageIDs[current.stageID] + "Kill"];
+		}
+		catch
+		{
+			return false;
+		}
+	}
+
+	// On Gold splits
+	if (vars.bossKillCounter > 0 && current.playerGold > old.playerGold)
+	{
+		// Tinker
+		if (vars.stageIDs[current.stageID] == "clockTower" && vars.bossKillCounter != 2) 
+		{ 
+			return false; 
+		}
+
+		// Black Knight 2
+		if (vars.stageIDs[current.stageID] == "blackKnight2") 
+		{ 
+			return settings["blackKnight2Gold"] && vars.characterIDs[current.characterID] == "plagueKnight"; 
+		}
+
+		// Everything else
+		if (!vars.stageIDs.ContainsKey(current.stageID)) { return false; }
+
+		try
+		{
+			return settings[vars.stageIDs[current.stageID] + "Gold"];
+		}
+		catch
+		{
+			return false;
+		}
 	}
 }
