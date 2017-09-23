@@ -161,16 +161,7 @@ split
 		}
 
 		// Everything else
-
-		// Settings has no "ContainsKey"-like method, so we have to try/catch instead
-		try
-		{
-			return settings[vars.stageIDs[current.stageID] + "Kill"];
-		}
-		catch
-		{
-			return false;
-		}
+		return settings[vars.stageIDs[current.stageID] + "Kill"];
 	}
 
 	// On Gold splits
@@ -197,14 +188,6 @@ split
 		}
 
 		// Everything else
-
-		try
-		{
-			return settings[vars.stageIDs[current.stageID] + "Gold"];
-		}
-		catch
-		{
-			return false;
-		}
+		return settings[vars.stageIDs[current.stageID] + "Gold"];
 	}
 }
